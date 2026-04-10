@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Александровски — Социальная сеть</title>
+    <title>Александровски — Реальное общение</title>
     <style>
         * {
             margin: 0;
@@ -29,7 +29,6 @@
             position: relative;
         }
 
-        /* Шапка */
         .header {
             background: #1a5cff;
             padding: 14px 16px;
@@ -58,7 +57,13 @@
             font-weight: bold;
         }
 
-        /* Баннер техработ */
+        .online-count {
+            font-size: 12px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
         .maintenance-banner {
             background: #ff3b30;
             color: white;
@@ -76,7 +81,14 @@
             100% { opacity: 0.8; }
         }
 
-        /* Формы авторизации */
+        .sync-status {
+            font-size: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
         .auth-container {
             flex: 1;
             display: flex;
@@ -130,18 +142,6 @@
             margin: 15px 0;
         }
 
-        .checkbox-group input {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .checkbox-group label {
-            color: #555;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
         .btn {
             width: 100%;
             padding: 14px;
@@ -153,12 +153,6 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 12px;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #1a5cff;
-            border: 1px solid #1a5cff;
         }
 
         .switch-auth {
@@ -180,7 +174,6 @@
             margin-top: 8px;
         }
 
-        /* Нижняя навигация */
         .bottom-nav {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(20px);
@@ -221,7 +214,6 @@
             display: block;
         }
 
-        /* Админ-панель */
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -244,7 +236,6 @@
         .admin-card .title { font-weight: 600; font-size: 14px; }
         .admin-card .desc { font-size: 11px; color: #888; margin-top: 4px; }
 
-        /* Кружочки (сторис) */
         .stories-row {
             background: white;
             padding: 16px;
@@ -319,18 +310,6 @@
             cursor: pointer;
         }
 
-        .story-text {
-            position: absolute;
-            bottom: 80px;
-            left: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.6);
-            padding: 12px;
-            border-radius: 20px;
-            text-align: center;
-            color: white;
-        }
-
         .story-modal {
             position: fixed;
             top: 0;
@@ -357,8 +336,11 @@
             cursor: pointer;
         }
 
-        /* Чат */
-        .chat-item {
+        .users-list {
+            padding: 8px 0;
+        }
+
+        .user-item {
             display: flex;
             align-items: center;
             padding: 14px 16px;
@@ -367,9 +349,14 @@
             margin: 8px 12px;
             border-radius: 20px;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        .avatar {
+        .user-item:hover {
+            background: #f0f4fa;
+        }
+
+        .user-avatar {
             width: 52px;
             height: 52px;
             border-radius: 50%;
@@ -379,6 +366,24 @@
             justify-content: center;
             font-size: 22px;
             color: white;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .user-status {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .user-status.online {
+            color: #4cd964;
         }
 
         .chat-window {
@@ -448,11 +453,6 @@
             color: #999;
         }
 
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
         .profile-header {
             background: linear-gradient(135deg, #1a5cff, #4a7cff);
             padding: 32px 20px;
@@ -492,14 +492,6 @@
             padding: 0 12px 12px;
         }
 
-        .card-media {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            margin-top: 8px;
-            border-radius: 16px;
-        }
-
         .toast {
             position: fixed;
             bottom: 80px;
@@ -519,6 +511,18 @@
             70% { opacity: 1; }
             100% { opacity: 0; visibility: hidden; }
         }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .no-users {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
     </style>
 </head>
 <body>
@@ -528,28 +532,26 @@
             <span>✨</span> Александровски
             <span class="admin-badge" id="adminBadge" style="display:none;">ADMIN</span>
         </div>
-        <div style="font-size: 12px;" id="statsBadge"></div>
+        <div class="online-count" id="onlineCount">👥 0 онлайн</div>
     </div>
 
-    <!-- Баннер технических работ (виден ВСЕМ пользователям) -->
     <div id="maintenanceBanner" class="maintenance-banner">
         🔧 ТЕХНИЧЕСКИЕ РАБОТЫ 🔧<br>
         Публикация постов, историй и отправка сообщений временно недоступны
     </div>
 
-    <!-- Формы авторизации -->
     <div id="authContainer" class="auth-container">
         <div class="logo">
             <div class="logo-icon">✨</div>
             <h2>Александровски</h2>
-            <p style="color: #6c757d; margin-top: 8px;">Социальная сеть</p>
+            <p style="color: #6c757d; margin-top: 8px;">Общайтесь с реальными людьми</p>
         </div>
         <div id="loginForm">
-            <div class="input-group"><input type="text" id="loginUsername" placeholder="Логин"></div>
-            <div class="input-group"><input type="password" id="loginPassword" placeholder="Пароль"></div>
+            <div class="input-group"><input type="text" id="loginUsername" placeholder="Логин" value="alex"></div>
+            <div class="input-group"><input type="password" id="loginPassword" placeholder="Пароль" value="admin123"></div>
             <div class="checkbox-group">
                 <input type="checkbox" id="rememberMeLogin">
-                <label for="rememberMeLogin">🔐 Запомнить меня</label>
+                <label>🔐 Запомнить меня</label>
             </div>
             <button class="btn" id="doLoginBtn">Войти</button>
             <div class="switch-auth">Нет аккаунта? <span id="showRegisterBtn">Зарегистрироваться</span></div>
@@ -562,7 +564,7 @@
             <div class="input-group"><textarea id="regBio" placeholder="О себе" rows="2"></textarea></div>
             <div class="checkbox-group">
                 <input type="checkbox" id="rememberMeReg">
-                <label for="rememberMeReg">🔐 Запомнить меня</label>
+                <label>🔐 Запомнить меня</label>
             </div>
             <button class="btn" id="doRegisterBtn">Зарегистрироваться</button>
             <div class="switch-auth">Уже есть аккаунт? <span id="showLoginBtn">Войти</span></div>
@@ -570,35 +572,29 @@
         </div>
     </div>
 
-    <!-- Основное приложение -->
     <div id="mainApp" style="display:none; flex-direction: column; height: 100%;">
         <div id="feedPage" class="page active-page">
             <div class="stories-row" id="storiesRow"></div>
             <div id="feedContainer"></div>
         </div>
-
         <div id="messagesPage" class="page">
-            <div id="usersListContainer"></div>
+            <div id="usersListContainer" class="users-list"></div>
         </div>
-
         <div id="adminPage" class="page">
             <div class="admin-grid" id="adminGrid"></div>
         </div>
-
         <div id="profilePage" class="page">
             <div id="profileContent"></div>
             <div style="padding: 16px;"><button id="logoutBtn" class="btn" style="background:#dc3545;">Выйти</button></div>
         </div>
-
         <div class="bottom-nav">
             <button class="nav-item active" data-page="feed"><span class="nav-icon">🏠</span><span>Лента</span></button>
-            <button class="nav-item" data-page="messages"><span class="nav-icon">💬</span><span>Чаты</span></button>
+            <button class="nav-item" data-page="messages"><span class="nav-icon">💬</span><span>Люди</span></button>
             <button class="nav-item" data-page="admin" id="adminNavBtn" style="display:none;"><span class="nav-icon">⚙️</span><span>Админ</span></button>
             <button class="nav-item" data-page="profile"><span class="nav-icon">👤</span><span>Профиль</span></button>
         </div>
     </div>
 
-    <!-- Окно чата -->
     <div id="chatWindow" class="chat-window">
         <div class="header" style="background:#1a5cff">
             <button id="closeChatBtn" style="background:none; border:none; color:white; font-size:28px;">←</button>
@@ -611,7 +607,6 @@
         </div>
     </div>
 
-    <!-- Просмотр истории -->
     <div id="storyViewer" class="story-viewer">
         <button class="story-close" id="closeStoryBtn">✕</button>
         <img id="storyImageView" class="story-media" style="display:none;">
@@ -619,7 +614,6 @@
         <div id="storyTextView" class="story-text"></div>
     </div>
 
-    <!-- Модалка добавления истории -->
     <div id="storyModal" class="story-modal">
         <button id="selectPhotoBtn">📷 Выбрать фото</button>
         <button id="selectVideoBtn">🎥 Выбрать видео</button>
@@ -631,21 +625,96 @@
 </div>
 
 <script>
-    // ========== ГЛОБАЛЬНЫЕ ДАННЫЕ ==========
-    // Данные платформы (общие для всех пользователей)
+    // ========== API ДЛЯ СИНХРОНИЗАЦИИ ==========
+    const API_BASE = "https://671e6b161dfc429919812b41.mockapi.io/api";
+    let maintenanceMode = false;
+    let activeUsers = new Map(); // userId -> {socketId, lastSeen}
+
+    // Обновление онлайн-статуса
+    function updateUserOnlineStatus(userId, isOnline) {
+        const user = platformData.users.find(u => u.id === userId);
+        if (user) {
+            user.isOnline = isOnline;
+            user.lastSeen = new Date().toISOString();
+            savePlatformData();
+        }
+        updateOnlineCountDisplay();
+        renderUsersList();
+    }
+
+    function updateOnlineCountDisplay() {
+        const onlineCount = platformData.users.filter(u => u.isOnline && u.id !== currentUser?.id).length;
+        const countSpan = document.getElementById('onlineCount');
+        if (countSpan) countSpan.innerHTML = `👥 ${onlineCount} онлайн`;
+    }
+
+    // Текущий пользователь устанавливается онлайн
+    function setCurrentUserOnline() {
+        if (currentUser) {
+            updateUserOnlineStatus(currentUser.id, true);
+            // Периодически обновляем статус (heartbeat)
+            if (window.heartbeatInterval) clearInterval(window.heartbeatInterval);
+            window.heartbeatInterval = setInterval(() => {
+                if (currentUser) {
+                    updateUserOnlineStatus(currentUser.id, true);
+                }
+            }, 30000);
+        }
+    }
+
+    // При выходе - офлайн
+    function setCurrentUserOffline() {
+        if (currentUser) {
+            updateUserOnlineStatus(currentUser.id, false);
+        }
+        if (window.heartbeatInterval) clearInterval(window.heartbeatInterval);
+    }
+
+    async function syncMaintenanceStatus() {
+        try {
+            const response = await fetch(`${API_BASE}/settings/1`);
+            if (response.ok) {
+                const data = await response.json();
+                maintenanceMode = data.maintenanceMode === true;
+                updateMaintenanceUI();
+                return true;
+            }
+        } catch (error) {
+            const local = localStorage.getItem('maintenanceMode_fallback');
+            if (local !== null) maintenanceMode = local === 'true';
+        }
+        updateMaintenanceUI();
+        return false;
+    }
+
+    async function setMaintenanceStatus(value) {
+        maintenanceMode = value;
+        updateMaintenanceUI();
+        try {
+            await fetch(`${API_BASE}/settings/1`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: 1, maintenanceMode: value, updatedAt: new Date().toISOString() })
+            });
+            showToast(value ? "🔧 Техработы ВКЛЮЧЕНЫ для всех" : "✅ Техработы ВЫКЛЮЧЕНЫ");
+        } catch (error) {
+            localStorage.setItem('maintenanceMode_fallback', value);
+            showToast(value ? "🔧 Техработы ВКЛЮЧЕНЫ (офлайн)" : "✅ Техработы ВЫКЛЮЧЕНЫ (офлайн)");
+        }
+    }
+
+    // ========== ДАННЫЕ ПЛАТФОРМЫ ==========
     let platformData = {
         users: [],
         posts: [],
         stories: [],
         privateMessages: {},
-        bannedUsers: [],
-        maintenanceMode: false
+        bannedUsers: []
     };
 
     let currentUser = null;
     let deviceId = null;
 
-    // ========== ИНИЦИАЛИЗАЦИЯ УСТРОЙСТВА ==========
     function getDeviceId() {
         let id = localStorage.getItem('device_id');
         if (!id) {
@@ -655,13 +724,11 @@
         return id;
     }
 
-    // ========== ЗАГРУЗКА/СОХРАНЕНИЕ ПЛАТФОРМЫ ==========
     function loadPlatformData() {
         const saved = localStorage.getItem('alexandrovski_platform');
         if (saved) {
             platformData = JSON.parse(saved);
         } else {
-            // Создаём начальные данные с Александром Епифановым как админом
             platformData = {
                 users: [{
                     id: "admin_alex",
@@ -671,12 +738,13 @@
                     bio: "Создатель Александровски | Администратор",
                     avatar: "АЕ",
                     isAdmin: true,
-                    deviceId: null
+                    isOnline: true,
+                    lastSeen: new Date().toISOString()
                 }],
                 posts: [{
                     id: "p1",
                     userId: "admin_alex",
-                    text: "Добро пожаловать в Александровски! 🚀 Современная социальная сеть",
+                    text: "Добро пожаловать в Александровски! 🚀 Здесь только реальные люди, никаких ботов!",
                     image: null,
                     video: null,
                     time: new Date().toISOString(),
@@ -684,18 +752,22 @@
                 }],
                 stories: [],
                 privateMessages: {},
-                bannedUsers: [],
-                maintenanceMode: false
+                bannedUsers: []
             };
             savePlatformData();
         }
+        // Убеждаемся, что у всех пользователей есть поля isOnline и lastSeen
+        platformData.users.forEach(user => {
+            if (user.isOnline === undefined) user.isOnline = false;
+            if (!user.lastSeen) user.lastSeen = new Date().toISOString();
+        });
+        savePlatformData();
     }
 
     function savePlatformData() {
         localStorage.setItem('alexandrovski_platform', JSON.stringify(platformData));
     }
 
-    // ========== СЕССИЯ ПОЛЬЗОВАТЕЛЯ ==========
     function saveSession(userId, remember) {
         if (remember) {
             localStorage.setItem('session_user_id', userId);
@@ -703,15 +775,12 @@
         } else {
             sessionStorage.setItem('session_user_id', userId);
             localStorage.removeItem('session_user_id');
-            localStorage.removeItem('session_remember');
         }
     }
 
     function getSessionUserId() {
-        // Сначала проверяем sessionStorage (не запомненные)
         let id = sessionStorage.getItem('session_user_id');
         if (id) return id;
-        // Потом localStorage (запомненные)
         id = localStorage.getItem('session_user_id');
         if (id && localStorage.getItem('session_remember') === 'true') return id;
         return null;
@@ -723,18 +792,13 @@
         localStorage.removeItem('session_remember');
     }
 
-    // ========== ПРОВЕРКА АВТОРИЗАЦИИ ==========
     function checkAutoLogin() {
         const userId = getSessionUserId();
         if (userId) {
             const user = platformData.users.find(u => u.id === userId);
             if (user) {
-                // Проверка устройства
-                if (user.deviceId && user.deviceId !== deviceId) {
-                    clearSession();
-                    return false;
-                }
                 currentUser = user;
+                setCurrentUserOnline();
                 showMainApp();
                 return true;
             }
@@ -742,12 +806,10 @@
         return false;
     }
 
-    // ========== ПОКАЗ/СКРЫТИЕ ОСНОВНОГО ПРИЛОЖЕНИЯ ==========
     function showMainApp() {
         document.getElementById('authContainer').style.display = 'none';
         document.getElementById('mainApp').style.display = 'flex';
         
-        // Показываем админ-панель только для админа
         if (currentUser.isAdmin) {
             document.getElementById('adminBadge').style.display = 'inline-block';
             document.getElementById('adminNavBtn').style.display = 'flex';
@@ -762,29 +824,24 @@
         renderUsersList();
         renderProfile();
         if (currentUser.isAdmin) renderAdminPanel();
-        
-        // Переключаем на ленту
         switchPage('feed');
+        updateOnlineCountDisplay();
     }
 
     function showAuth() {
+        setCurrentUserOffline();
         clearSession();
         currentUser = null;
         document.getElementById('authContainer').style.display = 'flex';
         document.getElementById('mainApp').style.display = 'none';
         document.getElementById('loginForm').style.display = 'block';
         document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginUsername').value = '';
-        document.getElementById('loginPassword').value = '';
-        document.getElementById('rememberMeLogin').checked = false;
     }
 
-    // ========== ОБНОВЛЕНИЕ UI ПРИ РЕЖИМЕ ТЕХРАБОТ ==========
     function updateMaintenanceUI() {
         const banner = document.getElementById('maintenanceBanner');
-        if (platformData.maintenanceMode) {
+        if (maintenanceMode) {
             banner.style.display = 'block';
-            // Блокируем поля ввода для ВСЕХ
             const msgInput = document.getElementById('chatMessageInput');
             const sendBtn = document.getElementById('sendChatBtn');
             if (msgInput) msgInput.disabled = true;
@@ -799,7 +856,7 @@
     }
 
     function checkMaintenance(actionName) {
-        if (platformData.maintenanceMode) {
+        if (maintenanceMode) {
             showToast(`🔧 Технические работы! ${actionName} временно недоступно`);
             return false;
         }
@@ -816,7 +873,7 @@
 
     function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { return m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'; }); }
 
-    // ========== РЕГИСТРАЦИЯ ==========
+    // ========== РЕГИСТРАЦИЯ И ВХОД ==========
     function register() {
         const fullname = document.getElementById('regFullname').value.trim();
         const login = document.getElementById('regLogin').value.trim();
@@ -842,17 +899,18 @@
             bio: bio || "Пользователь Александровски",
             avatar: fullname.slice(0,2).toUpperCase(),
             isAdmin: false,
-            deviceId: deviceId
+            isOnline: true,
+            lastSeen: new Date().toISOString()
         };
         platformData.users.push(newUser);
         savePlatformData();
         
         currentUser = newUser;
         saveSession(currentUser.id, rememberMe);
+        setCurrentUserOnline();
         showMainApp();
     }
 
-    // ========== ВХОД ==========
     function login() {
         const loginVal = document.getElementById('loginUsername').value.trim();
         const passwordVal = document.getElementById('loginPassword').value.trim();
@@ -865,25 +923,14 @@
             return;
         }
         
-        // Проверка устройства
-        if (user.deviceId && user.deviceId !== deviceId) {
-            errorSpan.innerText = 'Это новое устройство. Зарегистрируйтесь заново или войдите с основного устройства.';
-            return;
-        }
-        
-        // Привязываем устройство, если ещё не привязано
-        if (!user.deviceId) {
-            user.deviceId = deviceId;
-            savePlatformData();
-        }
-        
         currentUser = user;
         saveSession(currentUser.id, rememberMe);
+        setCurrentUserOnline();
         showMainApp();
     }
 
-    // ========== ВЫХОД ==========
     function logout() {
+        setCurrentUserOffline();
         clearSession();
         showAuth();
         showToast("Вы вышли из аккаунта");
@@ -901,30 +948,34 @@
             return `
                 <div class="feed-card">
                     <div class="card-header">
-                        <div class="avatar" style="width:44px; height:44px; font-size:18px;">${authorAvatar}</div>
+                        <div class="user-avatar" style="width:44px; height:44px; font-size:18px;">${authorAvatar}</div>
                         <div><strong>${escapeHtml(authorName)}</strong><br><span style="font-size:11px; color:#aaa;">${new Date(post.time).toLocaleString()}</span></div>
                     </div>
                     <div class="card-content">${escapeHtml(post.text)}</div>
-                    ${post.image ? `<img src="${post.image}" class="card-media">` : ''}
-                    ${post.video ? `<video src="${post.video}" controls class="card-media"></video>` : ''}
+                    ${post.image ? `<img src="${post.image}" class="card-media" style="width:100%; border-radius:16px; margin-top:8px;">` : ''}
+                    ${post.video ? `<video src="${post.video}" controls style="width:100%; border-radius:16px; margin-top:8px;"></video>` : ''}
                     <div style="padding: 12px; border-top:1px solid #eff3f8;">❤️ ${post.likes}</div>
                 </div>
             `;
         }).join('');
     }
 
-    // ========== ИСТОРИИ (ИСПРАВЛЕНЫ) ==========
+    // ========== ИСТОРИИ ==========
     function renderStories() {
         const container = document.getElementById('storiesRow');
         const validStories = platformData.stories.filter(s => s && s.data);
-        const storiesHtml = validStories.map((story, idx) => `
-            <div class="story-circle" onclick="viewStory(${idx})">
-                <div class="story-avatar" style="background-image: url('${story.mediaType === 'image' ? story.data : ''}'); background-size: cover; ${story.mediaType === 'image' ? '' : ''}">
-                    ${story.mediaType === 'image' ? '' : (story.mediaType === 'video' ? '🎥' : '📝')}
+        const storiesHtml = validStories.map((story, idx) => {
+            const author = platformData.users.find(u => u.id === story.userId);
+            const authorName = author ? author.fullname.slice(0,2) : "??";
+            return `
+                <div class="story-circle" onclick="viewStory(${idx})">
+                    <div class="story-avatar" style="background-image: url('${story.mediaType === 'image' ? story.data : ''}'); background-size: cover;">
+                        ${story.mediaType === 'image' ? '' : (story.mediaType === 'video' ? '🎥' : '📝')}
+                    </div>
+                    <span class="story-name">${authorName}</span>
                 </div>
-                <span class="story-name">${story.authorName || story.userId.slice(0,2)}</span>
-            </div>
-        `).join('');
+            `;
+        }).join('');
         
         container.innerHTML = `
             <div class="story-circle" id="addStoryCircle">
@@ -979,7 +1030,6 @@
         const newStory = {
             id: Date.now(),
             userId: currentUser.id,
-            authorName: currentUser.fullname,
             mediaType: mediaType,
             data: data,
             text: text,
@@ -992,22 +1042,45 @@
         showToast("История добавлена!");
     }
 
-    // ========== ЧАТЫ ==========
+    // ========== РЕАЛЬНОЕ ОБЩЕНИЕ (ТОЛЬКО ЛЮДИ) ==========
     function renderUsersList() {
         const container = document.getElementById('usersListContainer');
-        const otherUsers = platformData.users.filter(u => u.id !== currentUser.id && !platformData.bannedUsers.includes(u.id));
+        const otherUsers = platformData.users.filter(u => 
+            u.id !== currentUser.id && 
+            !platformData.bannedUsers.includes(u.id)
+        );
+        
+        if (otherUsers.length === 0) {
+            container.innerHTML = `<div class="empty-state">👋 Пока нет других пользователей<br>Пригласите друзей зарегистрироваться!</div>`;
+            return;
+        }
+        
         container.innerHTML = otherUsers.map(user => `
-            <div class="chat-item" data-user-id="${user.id}">
-                <div class="avatar">${user.avatar}</div>
-                <div class="chat-details">
-                    <div class="chat-name">${escapeHtml(user.fullname)}</div>
-                    <div style="font-size:12px;">${user.online ? '🟢 онлайн' : '⚫ не в сети'}</div>
+            <div class="user-item" data-user-id="${user.id}">
+                <div class="user-avatar">${user.avatar}</div>
+                <div class="user-info">
+                    <div class="user-name">${escapeHtml(user.fullname)}</div>
+                    <div class="user-status ${user.isOnline ? 'online' : ''}">
+                        ${user.isOnline ? '🟢 онлайн' : '⚫ был(а) ' + formatTimeAgo(user.lastSeen)}
+                    </div>
                 </div>
             </div>
         `).join('');
-        document.querySelectorAll('[data-user-id]').forEach(el => {
+        
+        document.querySelectorAll('.user-item').forEach(el => {
             el.addEventListener('click', () => openChat(el.dataset.userId));
         });
+    }
+
+    function formatTimeAgo(dateStr) {
+        if (!dateStr) return "давно";
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diff = Math.floor((now - date) / 1000 / 60);
+        if (diff < 1) return "только что";
+        if (diff < 60) return `${diff} мин назад`;
+        if (diff < 1440) return `${Math.floor(diff / 60)} ч назад`;
+        return `${Math.floor(diff / 1440)} дн назад`;
     }
 
     function getChatKey(u1, u2) { return [u1, u2].sort().join('_'); }
@@ -1015,11 +1088,12 @@
     function openChat(userId) {
         const user = platformData.users.find(u => u.id === userId);
         if (!user) return;
-        document.getElementById('chatWindowTitle').innerText = user.fullname;
+        document.getElementById('chatWindowTitle').innerHTML = `${escapeHtml(user.fullname)} ${user.isOnline ? '🟢' : '⚫'}`;
         document.getElementById('chatWindow').style.display = 'flex';
         window.currentChatPartner = user;
         renderChatMessages(userId);
         updateMaintenanceUI();
+        markMessagesAsRead(userId);
     }
     
     function renderChatMessages(otherId) {
@@ -1028,76 +1102,101 @@
         const container = document.getElementById('chatMessagesArea');
         container.innerHTML = msgs.map(msg => `
             <div class="message ${msg.senderId === currentUser.id ? 'outgoing' : 'incoming'}">
-                <div class="bubble">${escapeHtml(msg.text)}<br><span style="font-size:10px;">${new Date(msg.time).toLocaleTimeString()}</span></div>
+                <div class="bubble">
+                    ${escapeHtml(msg.text)}
+                    <div style="font-size:10px; opacity:0.7; margin-top:4px;">
+                        ${new Date(msg.time).toLocaleTimeString()}
+                        ${msg.read && msg.senderId !== currentUser.id ? ' ✓✓' : ''}
+                    </div>
+                </div>
             </div>
         `).join('');
         container.scrollTop = container.scrollHeight;
     }
     
+    function markMessagesAsRead(otherId) {
+        const key = getChatKey(currentUser.id, otherId);
+        if (platformData.privateMessages[key]) {
+            let updated = false;
+            platformData.privateMessages[key].forEach(msg => {
+                if (msg.senderId !== currentUser.id && !msg.read) {
+                    msg.read = true;
+                    updated = true;
+                }
+            });
+            if (updated) {
+                savePlatformData();
+                renderChatMessages(otherId);
+            }
+        }
+    }
+    
     function sendMessage(otherId, text) {
         if (!checkMaintenance("отправка сообщений")) return;
         if (!text.trim()) return;
+        
         const key = getChatKey(currentUser.id, otherId);
         if (!platformData.privateMessages[key]) platformData.privateMessages[key] = [];
-        platformData.privateMessages[key].push({
+        
+        const newMessage = {
             id: Date.now(),
             senderId: currentUser.id,
-            text: text,
-            time: new Date().toISOString()
-        });
+            text: text.trim(),
+            time: new Date().toISOString(),
+            read: false
+        };
+        
+        platformData.privateMessages[key].push(newMessage);
         savePlatformData();
         renderChatMessages(otherId);
         
-        // Имитация ответа
-        setTimeout(() => {
-            const replyKey = getChatKey(currentUser.id, otherId);
-            const replies = ["👍", "Понял!", "Круто!", "🔥"];
-            if (!platformData.privateMessages[replyKey]) platformData.privateMessages[replyKey] = [];
-            platformData.privateMessages[replyKey].push({
-                id: Date.now(),
-                senderId: otherId,
-                text: replies[Math.floor(Math.random()*replies.length)],
-                time: new Date().toISOString()
-            });
-            savePlatformData();
-            if (window.currentChatPartner?.id === otherId) renderChatMessages(otherId);
-        }, 1500);
+        // Проверяем, онлайн ли собеседник
+        const receiver = platformData.users.find(u => u.id === otherId);
+        if (receiver && receiver.isOnline) {
+            // Имитируем получение (реальный пользователь увидит сообщение при следующем входе)
+            showToast(`Сообщение отправлено ${receiver.fullname}`);
+        } else {
+            showToast(`Сообщение отправлено (${receiver?.fullname} получит при входе)`);
+        }
     }
 
     // ========== ПРОФИЛЬ ==========
     function renderProfile() {
+        const lastSeenText = currentUser.lastSeen ? formatTimeAgo(currentUser.lastSeen) : "только что";
         document.getElementById('profileContent').innerHTML = `
             <div class="profile-header">
                 <div class="profile-avatar">${currentUser.avatar}</div>
                 <div style="font-size:24px; font-weight:700;">${escapeHtml(currentUser.fullname)}</div>
                 <div>${escapeHtml(currentUser.bio)}</div>
+                <div style="margin-top:8px; font-size:13px;">
+                    ${currentUser.isOnline ? '🟢 Онлайн' : '⚫ Был(а) ' + lastSeenText}
+                </div>
                 ${currentUser.isAdmin ? '<div style="margin-top:8px;"><span class="admin-badge" style="background:white;">👑 Администратор</span></div>' : ''}
             </div>
             <div style="background:white; margin:16px; border-radius:24px; padding:16px;">
                 <div><strong>📊 Статистика</strong></div>
-                <div>👥 Пользователей: ${platformData.users.length}</div>
+                <div>👥 Всего пользователей: ${platformData.users.length}</div>
                 <div>📝 Постов: ${platformData.posts.length}</div>
                 <div>📸 Историй: ${platformData.stories.length}</div>
-                <div>🔧 Режим техработ: ${platformData.maintenanceMode ? "ВКЛЮЧЁН" : "ВЫКЛЮЧЁН"}</div>
+                <div>🔧 Режим техработ: ${maintenanceMode ? "ВКЛЮЧЁН" : "ВЫКЛЮЧЁН"}</div>
             </div>
         `;
     }
 
     // ========== АДМИН-ПАНЕЛЬ ==========
-    function toggleMaintenance() {
-        platformData.maintenanceMode = !platformData.maintenanceMode;
-        savePlatformData();
-        updateMaintenanceUI();
-        showToast(platformData.maintenanceMode ? "🔧 Режим техработ ВКЛЮЧЁН для всех" : "✅ Режим техработ ВЫКЛЮЧЁН");
+    async function toggleMaintenance() {
+        const newValue = !maintenanceMode;
+        await setMaintenanceStatus(newValue);
+        await syncMaintenanceStatus();
         renderAdminPanel();
         renderProfile();
     }
 
     const adminFunctions = [
-        { emoji: "🔧", name: "ТЕХРАБОТЫ", desc: platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ", action: toggleMaintenance },
+        { emoji: "🔧", name: "ТЕХРАБОТЫ", desc: maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ", action: toggleMaintenance },
         { emoji: "👥", name: "Все пользователи", desc: "Список всех", action: () => showToast(`Пользователей: ${platformData.users.length}\n${platformData.users.map(u=>u.fullname).join(', ')}`) },
-        { emoji: "🚫", name: "Заблокировать", desc: "Блокировка юзера", action: () => { let name = prompt("Имя пользователя"); let u = platformData.users.find(u=>u.fullname.toLowerCase().includes(name.toLowerCase())); if(u && !u.isAdmin){ platformData.bannedUsers.push(u.id); savePlatformData(); showToast(`Заблокирован ${u.fullname}`); } else showToast("Пользователь не найден или это админ"); } },
-        { emoji: "🔓", name: "Разблокировать", desc: "Снять блок", action: () => { if(platformData.bannedUsers.length){ platformData.bannedUsers.pop(); savePlatformData(); showToast("Разблокирован");} else showToast("Нет заблокированных"); } },
+        { emoji: "🚫", name: "Заблокировать", desc: "Блокировка юзера", action: () => { let name = prompt("Имя пользователя"); let u = platformData.users.find(u=>u.fullname.toLowerCase().includes(name.toLowerCase())); if(u && !u.isAdmin){ platformData.bannedUsers.push(u.id); savePlatformData(); showToast(`Заблокирован ${u.fullname}`); renderUsersList(); } else showToast("Пользователь не найден"); } },
+        { emoji: "🔓", name: "Разблокировать", desc: "Снять блок", action: () => { if(platformData.bannedUsers.length){ platformData.bannedUsers.pop(); savePlatformData(); showToast("Разблокирован"); renderUsersList();} else showToast("Нет заблокированных"); } },
         { emoji: "📝", name: "Создать пост", desc: "Опубликовать", action: () => { 
             if(!checkMaintenance("создание постов")) return;
             let text = prompt("Текст поста"); 
@@ -1109,14 +1208,25 @@
         { emoji: "💬", name: "Глобальный чат", desc: "Всем сообщение", action: () => { 
             if(!checkMaintenance("отправка сообщений")) return;
             let msg = prompt("Сообщение всем"); 
-            if(msg){ platformData.users.forEach(u => { if(u.id !== currentUser.id){ const key=getChatKey(currentUser.id,u.id); if(!platformData.privateMessages[key])platformData.privateMessages[key]=[]; platformData.privateMessages[key].push({id:Date.now(), senderId:currentUser.id, text:`[ADMIN] ${msg}`, time:new Date().toISOString()}); } }); savePlatformData(); showToast("Отправлено всем!"); } 
+            if(msg){ 
+                platformData.users.forEach(u => { 
+                    if(u.id !== currentUser.id){ 
+                        const key=getChatKey(currentUser.id,u.id); 
+                        if(!platformData.privateMessages[key])platformData.privateMessages[key]=[]; 
+                        platformData.privateMessages[key].push({id:Date.now(), senderId:currentUser.id, text:`[ADMIN] ${msg}`, time:new Date().toISOString(), read:false}); 
+                    } 
+                }); 
+                savePlatformData(); 
+                showToast("Отправлено всем!"); 
+            } 
         } },
         { emoji: "🎁", name: "Бонус всем", desc: "+100 лайков", action: () => { platformData.posts.forEach(p=>p.likes+=100); savePlatformData(); renderFeed(); showToast("Бонус начислен!"); } },
-        { emoji: "📊", name: "Статистика", desc: "Полный отчёт", action: () => { showToast(`📊 Постов:${platformData.posts.length} Историй:${platformData.stories.length} Юзеров:${platformData.users.length} Техработы:${platformData.maintenanceMode?"ВКЛ":"ВЫКЛ"}`); } }
+        { emoji: "📊", name: "Статистика", desc: "Полный отчёт", action: () => { showToast(`📊 Постов:${platformData.posts.length} Историй:${platformData.stories.length} Юзеров:${platformData.users.length} Техработы:${maintenanceMode?"ВКЛ":"ВЫКЛ"}`); } },
+        { emoji: "🔄", name: "Синхронизация", desc: "Обновить статус", action: async () => { await syncMaintenanceStatus(); showToast("Статус синхронизирован"); renderAdminPanel(); } }
     ];
 
     function renderAdminPanel() {
-        adminFunctions[0].desc = platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ";
+        adminFunctions[0].desc = maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ";
         const container = document.getElementById('adminGrid');
         container.innerHTML = adminFunctions.map(f => `
             <div class="admin-card">
@@ -1168,7 +1278,6 @@
     document.getElementById('doLoginBtn')?.addEventListener('click', login);
     document.getElementById('doRegisterBtn')?.addEventListener('click', register);
     
-    // Модалка истории
     document.getElementById('selectPhotoBtn')?.addEventListener('click', () => document.getElementById('photoStoryInput').click());
     document.getElementById('selectVideoBtn')?.addEventListener('click', () => document.getElementById('videoStoryInput').click());
     document.getElementById('selectTextBtn')?.addEventListener('click', () => {
@@ -1203,9 +1312,19 @@
     deviceId = getDeviceId();
     loadPlatformData();
     
-    if (!checkAutoLogin()) {
-        showAuth();
-    }
+    // Периодически обновляем онлайн-статусы
+    setInterval(() => {
+        if (currentUser) {
+            updateUserOnlineStatus(currentUser.id, true);
+        }
+        updateOnlineCountDisplay();
+    }, 30000);
+    
+    syncMaintenanceStatus().then(() => {
+        if (!checkAutoLogin()) {
+            showAuth();
+        }
+    });
 </script>
 </body>
 </html>
