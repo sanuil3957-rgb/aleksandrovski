@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Александровски — Админ-панель с режимом техработ</title>
+    <title>Александровски — Социальная сеть</title>
     <style>
         * {
             margin: 0;
@@ -29,6 +29,7 @@
             position: relative;
         }
 
+        /* Шапка */
         .header {
             background: #1a5cff;
             padding: 14px 16px;
@@ -75,6 +76,111 @@
             100% { opacity: 0.8; }
         }
 
+        /* Формы авторизации */
+        .auth-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 32px 24px;
+            background: white;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: #1a5cff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 12px;
+            color: white;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e0e0e6;
+            border-radius: 14px;
+            font-size: 16px;
+            background: #f9f9fc;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #1a5cff;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .checkbox-group input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            color: #555;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #1a5cff;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #1a5cff;
+            border: 1px solid #1a5cff;
+        }
+
+        .switch-auth {
+            text-align: center;
+            margin-top: 24px;
+            color: #6c757d;
+        }
+
+        .switch-auth span {
+            color: #1a5cff;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .error-msg {
+            color: #dc3545;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* Нижняя навигация */
         .bottom-nav {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(20px);
@@ -115,6 +221,7 @@
             display: block;
         }
 
+        /* Админ-панель */
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -137,6 +244,7 @@
         .admin-card .title { font-weight: 600; font-size: 14px; }
         .admin-card .desc { font-size: 11px; color: #888; margin-top: 4px; }
 
+        /* Кружочки (сторис) */
         .stories-row {
             background: white;
             padding: 16px;
@@ -175,6 +283,7 @@
             background: #f0f2f5;
             border: 2px dashed #1a5cff;
             color: #1a5cff;
+            font-size: 30px;
         }
 
         .story-viewer {
@@ -248,6 +357,7 @@
             cursor: pointer;
         }
 
+        /* Чат */
         .chat-item {
             display: flex;
             align-items: center;
@@ -409,11 +519,6 @@
             70% { opacity: 1; }
             100% { opacity: 0; visibility: hidden; }
         }
-
-        .disabled-block {
-            pointer-events: none;
-            opacity: 0.6;
-        }
     </style>
 </head>
 <body>
@@ -421,40 +526,76 @@
     <div class="header">
         <div class="header-logo">
             <span>✨</span> Александровски
-            <span class="admin-badge" id="adminBadge">ADMIN</span>
+            <span class="admin-badge" id="adminBadge" style="display:none;">ADMIN</span>
         </div>
         <div style="font-size: 12px;" id="statsBadge"></div>
     </div>
 
-    <!-- Баннер технических работ -->
+    <!-- Баннер технических работ (виден ВСЕМ пользователям) -->
     <div id="maintenanceBanner" class="maintenance-banner">
-        🔧 РЕЖИМ ТЕХНИЧЕСКИХ РАБОТ 🔧<br>
+        🔧 ТЕХНИЧЕСКИЕ РАБОТЫ 🔧<br>
         Публикация постов, историй и отправка сообщений временно недоступны
     </div>
 
-    <div id="feedPage" class="page active-page">
-        <div class="stories-row" id="storiesRow"></div>
-        <div id="feedContainer"></div>
+    <!-- Формы авторизации -->
+    <div id="authContainer" class="auth-container">
+        <div class="logo">
+            <div class="logo-icon">✨</div>
+            <h2>Александровски</h2>
+            <p style="color: #6c757d; margin-top: 8px;">Социальная сеть</p>
+        </div>
+        <div id="loginForm">
+            <div class="input-group"><input type="text" id="loginUsername" placeholder="Логин"></div>
+            <div class="input-group"><input type="password" id="loginPassword" placeholder="Пароль"></div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="rememberMeLogin">
+                <label for="rememberMeLogin">🔐 Запомнить меня</label>
+            </div>
+            <button class="btn" id="doLoginBtn">Войти</button>
+            <div class="switch-auth">Нет аккаунта? <span id="showRegisterBtn">Зарегистрироваться</span></div>
+            <div id="loginError" class="error-msg"></div>
+        </div>
+        <div id="registerForm" style="display:none">
+            <div class="input-group"><input type="text" id="regFullname" placeholder="Имя и фамилия"></div>
+            <div class="input-group"><input type="text" id="regLogin" placeholder="Логин"></div>
+            <div class="input-group"><input type="password" id="regPassword" placeholder="Пароль"></div>
+            <div class="input-group"><textarea id="regBio" placeholder="О себе" rows="2"></textarea></div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="rememberMeReg">
+                <label for="rememberMeReg">🔐 Запомнить меня</label>
+            </div>
+            <button class="btn" id="doRegisterBtn">Зарегистрироваться</button>
+            <div class="switch-auth">Уже есть аккаунт? <span id="showLoginBtn">Войти</span></div>
+            <div id="regError" class="error-msg"></div>
+        </div>
     </div>
 
-    <div id="messagesPage" class="page">
-        <div id="usersListContainer"></div>
-    </div>
+    <!-- Основное приложение -->
+    <div id="mainApp" style="display:none; flex-direction: column; height: 100%;">
+        <div id="feedPage" class="page active-page">
+            <div class="stories-row" id="storiesRow"></div>
+            <div id="feedContainer"></div>
+        </div>
 
-    <div id="adminPage" class="page">
-        <div class="admin-grid" id="adminGrid"></div>
-    </div>
+        <div id="messagesPage" class="page">
+            <div id="usersListContainer"></div>
+        </div>
 
-    <div id="profilePage" class="page">
-        <div id="profileContent"></div>
-        <div style="padding: 16px;"><button id="logoutBtn" style="width:100%; background:#1a5cff; border:none; padding:14px; border-radius:30px; color:white;">Выйти</button></div>
-    </div>
+        <div id="adminPage" class="page">
+            <div class="admin-grid" id="adminGrid"></div>
+        </div>
 
-    <div class="bottom-nav">
-        <button class="nav-item active" data-page="feed"><span class="nav-icon">🏠</span><span>Лента</span></button>
-        <button class="nav-item" data-page="messages"><span class="nav-icon">💬</span><span>Чаты</span></button>
-        <button class="nav-item" data-page="admin"><span class="nav-icon">⚙️</span><span>Админ</span></button>
-        <button class="nav-item" data-page="profile"><span class="nav-icon">👤</span><span>Профиль</span></button>
+        <div id="profilePage" class="page">
+            <div id="profileContent"></div>
+            <div style="padding: 16px;"><button id="logoutBtn" class="btn" style="background:#dc3545;">Выйти</button></div>
+        </div>
+
+        <div class="bottom-nav">
+            <button class="nav-item active" data-page="feed"><span class="nav-icon">🏠</span><span>Лента</span></button>
+            <button class="nav-item" data-page="messages"><span class="nav-icon">💬</span><span>Чаты</span></button>
+            <button class="nav-item" data-page="admin" id="adminNavBtn" style="display:none;"><span class="nav-icon">⚙️</span><span>Админ</span></button>
+            <button class="nav-item" data-page="profile"><span class="nav-icon">👤</span><span>Профиль</span></button>
+        </div>
     </div>
 
     <!-- Окно чата -->
@@ -490,65 +631,160 @@
 </div>
 
 <script>
-    // ========== ДАННЫЕ ==========
-    let currentUser = {
-        id: "alex_epifanov",
-        fullname: "Александр Епифанов",
-        avatar: "АЕ",
-        bio: "Создатель Александровски | Администратор",
-        isAdmin: true
+    // ========== ГЛОБАЛЬНЫЕ ДАННЫЕ ==========
+    // Данные платформы (общие для всех пользователей)
+    let platformData = {
+        users: [],
+        posts: [],
+        stories: [],
+        privateMessages: {},
+        bannedUsers: [],
+        maintenanceMode: false
     };
 
-    let otherUsers = [
-        { id: "friend1", fullname: "Дмитрий Кузнецов", avatar: "ДК", online: true, blocked: false },
-        { id: "friend2", fullname: "Екатерина Волкова", avatar: "ЕВ", online: true, blocked: false },
-        { id: "friend3", fullname: "Максим Соколов", avatar: "МС", online: false, blocked: false },
-        { id: "friend4", fullname: "Анна Морозова", avatar: "АМ", online: true, blocked: false },
-        { id: "friend5", fullname: "Сергей Васильев", avatar: "СВ", online: false, blocked: false }
-    ];
+    let currentUser = null;
+    let deviceId = null;
 
-    let posts = [
-        { id: "p1", userId: "alex_epifanov", text: "Добро пожаловать в Александровски! 🚀", image: null, video: null, time: new Date().toISOString(), likes: 156 }
-    ];
-
-    let stories = [];
-    let privateMessages = {};
-    let bannedUsers = [];
-    let reportedPosts = [];
-    
-    // РЕЖИМ ТЕХНИЧЕСКИХ РАБОТ (по умолчанию выключен)
-    let maintenanceMode = false;
-
-    // ========== ЗАГРУЗКА/СОХРАНЕНИЕ ==========
-    function loadData() {
-        const saved = localStorage.getItem('alex_admin_data_v2');
-        if (saved) {
-            const data = JSON.parse(saved);
-            stories = data.stories || [];
-            posts = data.posts || posts;
-            otherUsers = data.otherUsers || otherUsers;
-            bannedUsers = data.bannedUsers || [];
-            reportedPosts = data.reportedPosts || [];
-            maintenanceMode = data.maintenanceMode || false;
-            privateMessages = data.privateMessages || {};
+    // ========== ИНИЦИАЛИЗАЦИЯ УСТРОЙСТВА ==========
+    function getDeviceId() {
+        let id = localStorage.getItem('device_id');
+        if (!id) {
+            id = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('device_id', id);
         }
+        return id;
+    }
+
+    // ========== ЗАГРУЗКА/СОХРАНЕНИЕ ПЛАТФОРМЫ ==========
+    function loadPlatformData() {
+        const saved = localStorage.getItem('alexandrovski_platform');
+        if (saved) {
+            platformData = JSON.parse(saved);
+        } else {
+            // Создаём начальные данные с Александром Епифановым как админом
+            platformData = {
+                users: [{
+                    id: "admin_alex",
+                    fullname: "Александр Епифанов",
+                    login: "alex",
+                    password: "admin123",
+                    bio: "Создатель Александровски | Администратор",
+                    avatar: "АЕ",
+                    isAdmin: true,
+                    deviceId: null
+                }],
+                posts: [{
+                    id: "p1",
+                    userId: "admin_alex",
+                    text: "Добро пожаловать в Александровски! 🚀 Современная социальная сеть",
+                    image: null,
+                    video: null,
+                    time: new Date().toISOString(),
+                    likes: 156
+                }],
+                stories: [],
+                privateMessages: {},
+                bannedUsers: [],
+                maintenanceMode: false
+            };
+            savePlatformData();
+        }
+    }
+
+    function savePlatformData() {
+        localStorage.setItem('alexandrovski_platform', JSON.stringify(platformData));
+    }
+
+    // ========== СЕССИЯ ПОЛЬЗОВАТЕЛЯ ==========
+    function saveSession(userId, remember) {
+        if (remember) {
+            localStorage.setItem('session_user_id', userId);
+            localStorage.setItem('session_remember', 'true');
+        } else {
+            sessionStorage.setItem('session_user_id', userId);
+            localStorage.removeItem('session_user_id');
+            localStorage.removeItem('session_remember');
+        }
+    }
+
+    function getSessionUserId() {
+        // Сначала проверяем sessionStorage (не запомненные)
+        let id = sessionStorage.getItem('session_user_id');
+        if (id) return id;
+        // Потом localStorage (запомненные)
+        id = localStorage.getItem('session_user_id');
+        if (id && localStorage.getItem('session_remember') === 'true') return id;
+        return null;
+    }
+
+    function clearSession() {
+        sessionStorage.removeItem('session_user_id');
+        localStorage.removeItem('session_user_id');
+        localStorage.removeItem('session_remember');
+    }
+
+    // ========== ПРОВЕРКА АВТОРИЗАЦИИ ==========
+    function checkAutoLogin() {
+        const userId = getSessionUserId();
+        if (userId) {
+            const user = platformData.users.find(u => u.id === userId);
+            if (user) {
+                // Проверка устройства
+                if (user.deviceId && user.deviceId !== deviceId) {
+                    clearSession();
+                    return false;
+                }
+                currentUser = user;
+                showMainApp();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ========== ПОКАЗ/СКРЫТИЕ ОСНОВНОГО ПРИЛОЖЕНИЯ ==========
+    function showMainApp() {
+        document.getElementById('authContainer').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'flex';
+        
+        // Показываем админ-панель только для админа
+        if (currentUser.isAdmin) {
+            document.getElementById('adminBadge').style.display = 'inline-block';
+            document.getElementById('adminNavBtn').style.display = 'flex';
+        } else {
+            document.getElementById('adminBadge').style.display = 'none';
+            document.getElementById('adminNavBtn').style.display = 'none';
+        }
+        
         updateMaintenanceUI();
+        renderFeed();
+        renderStories();
+        renderUsersList();
+        renderProfile();
+        if (currentUser.isAdmin) renderAdminPanel();
+        
+        // Переключаем на ленту
+        switchPage('feed');
     }
 
-    function saveData() {
-        localStorage.setItem('alex_admin_data_v2', JSON.stringify({
-            stories, posts, otherUsers, bannedUsers, reportedPosts, maintenanceMode, privateMessages
-        }));
+    function showAuth() {
+        clearSession();
+        currentUser = null;
+        document.getElementById('authContainer').style.display = 'flex';
+        document.getElementById('mainApp').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginUsername').value = '';
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('rememberMeLogin').checked = false;
     }
 
-    loadData();
-
-    // ========== ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ПРИ РЕЖИМЕ ТЕХРАБОТ ==========
+    // ========== ОБНОВЛЕНИЕ UI ПРИ РЕЖИМЕ ТЕХРАБОТ ==========
     function updateMaintenanceUI() {
         const banner = document.getElementById('maintenanceBanner');
-        if (maintenanceMode) {
+        if (platformData.maintenanceMode) {
             banner.style.display = 'block';
-            // Блокируем поля ввода сообщений
+            // Блокируем поля ввода для ВСЕХ
             const msgInput = document.getElementById('chatMessageInput');
             const sendBtn = document.getElementById('sendChatBtn');
             if (msgInput) msgInput.disabled = true;
@@ -562,10 +798,9 @@
         }
     }
 
-    // Проверка возможности действия
     function checkMaintenance(actionName) {
-        if (maintenanceMode) {
-            showToast(`🔧 Режим техработ! ${actionName} временно недоступно`);
+        if (platformData.maintenanceMode) {
+            showToast(`🔧 Технические работы! ${actionName} временно недоступно`);
             return false;
         }
         return true;
@@ -581,20 +816,93 @@
 
     function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m) { return m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'; }); }
 
+    // ========== РЕГИСТРАЦИЯ ==========
+    function register() {
+        const fullname = document.getElementById('regFullname').value.trim();
+        const login = document.getElementById('regLogin').value.trim();
+        const password = document.getElementById('regPassword').value.trim();
+        const bio = document.getElementById('regBio').value.trim();
+        const rememberMe = document.getElementById('rememberMeReg').checked;
+        const errorSpan = document.getElementById('regError');
+
+        if (!fullname || !login || !password) {
+            errorSpan.innerText = 'Заполните все поля';
+            return;
+        }
+        if (platformData.users.find(u => u.login === login)) {
+            errorSpan.innerText = 'Логин уже занят';
+            return;
+        }
+        
+        const newUser = {
+            id: 'user_' + Date.now(),
+            fullname: fullname,
+            login: login,
+            password: password,
+            bio: bio || "Пользователь Александровски",
+            avatar: fullname.slice(0,2).toUpperCase(),
+            isAdmin: false,
+            deviceId: deviceId
+        };
+        platformData.users.push(newUser);
+        savePlatformData();
+        
+        currentUser = newUser;
+        saveSession(currentUser.id, rememberMe);
+        showMainApp();
+    }
+
+    // ========== ВХОД ==========
+    function login() {
+        const loginVal = document.getElementById('loginUsername').value.trim();
+        const passwordVal = document.getElementById('loginPassword').value.trim();
+        const rememberMe = document.getElementById('rememberMeLogin').checked;
+        const errorSpan = document.getElementById('loginError');
+        
+        const user = platformData.users.find(u => u.login === loginVal && u.password === passwordVal);
+        if (!user) {
+            errorSpan.innerText = 'Неверный логин или пароль';
+            return;
+        }
+        
+        // Проверка устройства
+        if (user.deviceId && user.deviceId !== deviceId) {
+            errorSpan.innerText = 'Это новое устройство. Зарегистрируйтесь заново или войдите с основного устройства.';
+            return;
+        }
+        
+        // Привязываем устройство, если ещё не привязано
+        if (!user.deviceId) {
+            user.deviceId = deviceId;
+            savePlatformData();
+        }
+        
+        currentUser = user;
+        saveSession(currentUser.id, rememberMe);
+        showMainApp();
+    }
+
+    // ========== ВЫХОД ==========
+    function logout() {
+        clearSession();
+        showAuth();
+        showToast("Вы вышли из аккаунта");
+    }
+
     // ========== ЛЕНТА ==========
     function renderFeed() {
         const container = document.getElementById('feedContainer');
-        const filteredPosts = posts.filter(p => !bannedUsers.includes(p.userId));
+        const filteredPosts = platformData.posts.filter(p => !platformData.bannedUsers.includes(p.userId));
         const sorted = [...filteredPosts].reverse();
         container.innerHTML = sorted.map(post => {
-            const author = post.userId === currentUser.id ? currentUser : otherUsers.find(u => u.id === post.userId);
+            const author = platformData.users.find(u => u.id === post.userId);
             const authorName = author ? author.fullname : "Пользователь";
             const authorAvatar = author ? author.avatar : "??";
             return `
                 <div class="feed-card">
                     <div class="card-header">
                         <div class="avatar" style="width:44px; height:44px; font-size:18px;">${authorAvatar}</div>
-                        <div><strong>${authorName}</strong><br><span style="font-size:11px; color:#aaa;">${new Date(post.time).toLocaleString()}</span></div>
+                        <div><strong>${escapeHtml(authorName)}</strong><br><span style="font-size:11px; color:#aaa;">${new Date(post.time).toLocaleString()}</span></div>
                     </div>
                     <div class="card-content">${escapeHtml(post.text)}</div>
                     ${post.image ? `<img src="${post.image}" class="card-media">` : ''}
@@ -605,18 +913,19 @@
         }).join('');
     }
 
-    // ========== ИСТОРИИ ==========
+    // ========== ИСТОРИИ (ИСПРАВЛЕНЫ) ==========
     function renderStories() {
         const container = document.getElementById('storiesRow');
-        const validStories = stories.filter(s => s && s.data);
+        const validStories = platformData.stories.filter(s => s && s.data);
         const storiesHtml = validStories.map((story, idx) => `
             <div class="story-circle" onclick="viewStory(${idx})">
-                <div class="story-avatar" style="background-image: url('${story.mediaType === 'image' ? story.data : ''}'); background-size: cover; ${story.mediaType === 'image' ? 'background:none;' : ''}">
+                <div class="story-avatar" style="background-image: url('${story.mediaType === 'image' ? story.data : ''}'); background-size: cover; ${story.mediaType === 'image' ? '' : ''}">
                     ${story.mediaType === 'image' ? '' : (story.mediaType === 'video' ? '🎥' : '📝')}
                 </div>
-                <span class="story-name">${new Date(story.time).toLocaleTimeString().slice(0,5)}</span>
+                <span class="story-name">${story.authorName || story.userId.slice(0,2)}</span>
             </div>
         `).join('');
+        
         container.innerHTML = `
             <div class="story-circle" id="addStoryCircle">
                 <div class="story-avatar add">+</div>
@@ -624,22 +933,28 @@
             </div>
             ${storiesHtml}
         `;
-        document.getElementById('addStoryCircle')?.addEventListener('click', () => {
-            if (!checkMaintenance("добавление историй")) return;
-            document.getElementById('storyModal').style.display = 'flex';
-        });
+        
+        const addBtn = document.getElementById('addStoryCircle');
+        if (addBtn) {
+            addBtn.onclick = () => {
+                if (!checkMaintenance("добавление историй")) return;
+                document.getElementById('storyModal').style.display = 'flex';
+            };
+        }
     }
 
     window.viewStory = function(idx) {
-        const story = stories[idx];
+        const story = platformData.stories[idx];
         if (!story || !story.data) { showToast("История недоступна"); return; }
         const viewer = document.getElementById('storyViewer');
         const imgView = document.getElementById('storyImageView');
         const videoView = document.getElementById('storyVideoView');
         const textView = document.getElementById('storyTextView');
+        
         imgView.style.display = 'none';
         videoView.style.display = 'none';
-        videoView.pause();
+        if (videoView) videoView.pause();
+        
         if (story.mediaType === 'image') {
             imgView.src = story.data;
             imgView.style.display = 'block';
@@ -647,13 +962,15 @@
             videoView.src = story.data;
             videoView.style.display = 'block';
             videoView.play().catch(e => console.log);
+        } else {
+            textView.innerText = story.text || '';
         }
-        textView.innerText = story.text || '';
+        
         viewer.style.display = 'flex';
         if (window.storyTimeout) clearTimeout(window.storyTimeout);
         window.storyTimeout = setTimeout(() => {
             viewer.style.display = 'none';
-            videoView.pause();
+            if (videoView) videoView.pause();
         }, 10000);
     };
 
@@ -662,31 +979,208 @@
         const newStory = {
             id: Date.now(),
             userId: currentUser.id,
+            authorName: currentUser.fullname,
             mediaType: mediaType,
             data: data,
             text: text,
             time: new Date().toISOString()
         };
-        stories.unshift(newStory);
-        if (stories.length > 20) stories.pop();
-        saveData();
+        platformData.stories.unshift(newStory);
+        if (platformData.stories.length > 20) platformData.stories.pop();
+        savePlatformData();
         renderStories();
         showToast("История добавлена!");
     }
 
-    document.getElementById('selectPhotoBtn')?.addEventListener('click', () => {
-        if (!checkMaintenance("добавление фото")) return;
-        document.getElementById('photoStoryInput').click();
+    // ========== ЧАТЫ ==========
+    function renderUsersList() {
+        const container = document.getElementById('usersListContainer');
+        const otherUsers = platformData.users.filter(u => u.id !== currentUser.id && !platformData.bannedUsers.includes(u.id));
+        container.innerHTML = otherUsers.map(user => `
+            <div class="chat-item" data-user-id="${user.id}">
+                <div class="avatar">${user.avatar}</div>
+                <div class="chat-details">
+                    <div class="chat-name">${escapeHtml(user.fullname)}</div>
+                    <div style="font-size:12px;">${user.online ? '🟢 онлайн' : '⚫ не в сети'}</div>
+                </div>
+            </div>
+        `).join('');
+        document.querySelectorAll('[data-user-id]').forEach(el => {
+            el.addEventListener('click', () => openChat(el.dataset.userId));
+        });
+    }
+
+    function getChatKey(u1, u2) { return [u1, u2].sort().join('_'); }
+    
+    function openChat(userId) {
+        const user = platformData.users.find(u => u.id === userId);
+        if (!user) return;
+        document.getElementById('chatWindowTitle').innerText = user.fullname;
+        document.getElementById('chatWindow').style.display = 'flex';
+        window.currentChatPartner = user;
+        renderChatMessages(userId);
+        updateMaintenanceUI();
+    }
+    
+    function renderChatMessages(otherId) {
+        const key = getChatKey(currentUser.id, otherId);
+        const msgs = platformData.privateMessages[key] || [];
+        const container = document.getElementById('chatMessagesArea');
+        container.innerHTML = msgs.map(msg => `
+            <div class="message ${msg.senderId === currentUser.id ? 'outgoing' : 'incoming'}">
+                <div class="bubble">${escapeHtml(msg.text)}<br><span style="font-size:10px;">${new Date(msg.time).toLocaleTimeString()}</span></div>
+            </div>
+        `).join('');
+        container.scrollTop = container.scrollHeight;
+    }
+    
+    function sendMessage(otherId, text) {
+        if (!checkMaintenance("отправка сообщений")) return;
+        if (!text.trim()) return;
+        const key = getChatKey(currentUser.id, otherId);
+        if (!platformData.privateMessages[key]) platformData.privateMessages[key] = [];
+        platformData.privateMessages[key].push({
+            id: Date.now(),
+            senderId: currentUser.id,
+            text: text,
+            time: new Date().toISOString()
+        });
+        savePlatformData();
+        renderChatMessages(otherId);
+        
+        // Имитация ответа
+        setTimeout(() => {
+            const replyKey = getChatKey(currentUser.id, otherId);
+            const replies = ["👍", "Понял!", "Круто!", "🔥"];
+            if (!platformData.privateMessages[replyKey]) platformData.privateMessages[replyKey] = [];
+            platformData.privateMessages[replyKey].push({
+                id: Date.now(),
+                senderId: otherId,
+                text: replies[Math.floor(Math.random()*replies.length)],
+                time: new Date().toISOString()
+            });
+            savePlatformData();
+            if (window.currentChatPartner?.id === otherId) renderChatMessages(otherId);
+        }, 1500);
+    }
+
+    // ========== ПРОФИЛЬ ==========
+    function renderProfile() {
+        document.getElementById('profileContent').innerHTML = `
+            <div class="profile-header">
+                <div class="profile-avatar">${currentUser.avatar}</div>
+                <div style="font-size:24px; font-weight:700;">${escapeHtml(currentUser.fullname)}</div>
+                <div>${escapeHtml(currentUser.bio)}</div>
+                ${currentUser.isAdmin ? '<div style="margin-top:8px;"><span class="admin-badge" style="background:white;">👑 Администратор</span></div>' : ''}
+            </div>
+            <div style="background:white; margin:16px; border-radius:24px; padding:16px;">
+                <div><strong>📊 Статистика</strong></div>
+                <div>👥 Пользователей: ${platformData.users.length}</div>
+                <div>📝 Постов: ${platformData.posts.length}</div>
+                <div>📸 Историй: ${platformData.stories.length}</div>
+                <div>🔧 Режим техработ: ${platformData.maintenanceMode ? "ВКЛЮЧЁН" : "ВЫКЛЮЧЁН"}</div>
+            </div>
+        `;
+    }
+
+    // ========== АДМИН-ПАНЕЛЬ ==========
+    function toggleMaintenance() {
+        platformData.maintenanceMode = !platformData.maintenanceMode;
+        savePlatformData();
+        updateMaintenanceUI();
+        showToast(platformData.maintenanceMode ? "🔧 Режим техработ ВКЛЮЧЁН для всех" : "✅ Режим техработ ВЫКЛЮЧЁН");
+        renderAdminPanel();
+        renderProfile();
+    }
+
+    const adminFunctions = [
+        { emoji: "🔧", name: "ТЕХРАБОТЫ", desc: platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ", action: toggleMaintenance },
+        { emoji: "👥", name: "Все пользователи", desc: "Список всех", action: () => showToast(`Пользователей: ${platformData.users.length}\n${platformData.users.map(u=>u.fullname).join(', ')}`) },
+        { emoji: "🚫", name: "Заблокировать", desc: "Блокировка юзера", action: () => { let name = prompt("Имя пользователя"); let u = platformData.users.find(u=>u.fullname.toLowerCase().includes(name.toLowerCase())); if(u && !u.isAdmin){ platformData.bannedUsers.push(u.id); savePlatformData(); showToast(`Заблокирован ${u.fullname}`); } else showToast("Пользователь не найден или это админ"); } },
+        { emoji: "🔓", name: "Разблокировать", desc: "Снять блок", action: () => { if(platformData.bannedUsers.length){ platformData.bannedUsers.pop(); savePlatformData(); showToast("Разблокирован");} else showToast("Нет заблокированных"); } },
+        { emoji: "📝", name: "Создать пост", desc: "Опубликовать", action: () => { 
+            if(!checkMaintenance("создание постов")) return;
+            let text = prompt("Текст поста"); 
+            if(text){ platformData.posts.push({id:Date.now(), userId:currentUser.id, text, image:null, video:null, time:new Date().toISOString(), likes:0}); savePlatformData(); renderFeed(); showToast("Пост создан!"); } 
+        } },
+        { emoji: "🗑️", name: "Удалить пост", desc: "По ID", action: () => { let id = prompt("ID поста"); let idx = platformData.posts.findIndex(p=>p.id==id); if(idx>=0){ platformData.posts.splice(idx,1); savePlatformData(); renderFeed(); showToast("Удалено"); } } },
+        { emoji: "📸", name: "Удалить историю", desc: "Последнюю", action: () => { if(platformData.stories.length){ platformData.stories.shift(); savePlatformData(); renderStories(); showToast("История удалена"); } } },
+        { emoji: "✏️", name: "Изменить имя", desc: "Своё имя", action: () => { let n = prompt("Новое имя", currentUser.fullname); if(n){ currentUser.fullname=n; currentUser.avatar=n.slice(0,2).toUpperCase(); savePlatformData(); renderProfile(); renderFeed(); showToast("Имя изменено"); } } },
+        { emoji: "💬", name: "Глобальный чат", desc: "Всем сообщение", action: () => { 
+            if(!checkMaintenance("отправка сообщений")) return;
+            let msg = prompt("Сообщение всем"); 
+            if(msg){ platformData.users.forEach(u => { if(u.id !== currentUser.id){ const key=getChatKey(currentUser.id,u.id); if(!platformData.privateMessages[key])platformData.privateMessages[key]=[]; platformData.privateMessages[key].push({id:Date.now(), senderId:currentUser.id, text:`[ADMIN] ${msg}`, time:new Date().toISOString()}); } }); savePlatformData(); showToast("Отправлено всем!"); } 
+        } },
+        { emoji: "🎁", name: "Бонус всем", desc: "+100 лайков", action: () => { platformData.posts.forEach(p=>p.likes+=100); savePlatformData(); renderFeed(); showToast("Бонус начислен!"); } },
+        { emoji: "📊", name: "Статистика", desc: "Полный отчёт", action: () => { showToast(`📊 Постов:${platformData.posts.length} Историй:${platformData.stories.length} Юзеров:${platformData.users.length} Техработы:${platformData.maintenanceMode?"ВКЛ":"ВЫКЛ"}`); } }
+    ];
+
+    function renderAdminPanel() {
+        adminFunctions[0].desc = platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ";
+        const container = document.getElementById('adminGrid');
+        container.innerHTML = adminFunctions.map(f => `
+            <div class="admin-card">
+                <div class="emoji">${f.emoji}</div>
+                <div class="title">${f.name}</div>
+                <div class="desc">${f.desc}</div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.admin-card').forEach((card, idx) => {
+            card.onclick = () => adminFunctions[idx].action();
+        });
+    }
+
+    // ========== НАВИГАЦИЯ ==========
+    function switchPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(`${pageId}Page`).classList.add('active-page');
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+        const targetBtn = document.querySelector(`[data-page="${pageId}"]`);
+        if (targetBtn) targetBtn.classList.add('active');
+        if (pageId === 'feed') { renderFeed(); renderStories(); }
+        if (pageId === 'messages') renderUsersList();
+        if (pageId === 'admin' && currentUser?.isAdmin) renderAdminPanel();
+        if (pageId === 'profile') renderProfile();
+        updateMaintenanceUI();
+    }
+
+    // ========== ОБРАБОТЧИКИ ==========
+    document.getElementById('closeChatBtn')?.addEventListener('click', () => document.getElementById('chatWindow').style.display = 'none');
+    document.getElementById('sendChatBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('chatMessageInput');
+        if (input.value.trim() && window.currentChatPartner) {
+            sendMessage(window.currentChatPartner.id, input.value.trim());
+            input.value = '';
+        }
     });
-    document.getElementById('selectVideoBtn')?.addEventListener('click', () => {
-        if (!checkMaintenance("добавление видео")) return;
-        document.getElementById('videoStoryInput').click();
+    document.getElementById('chatMessageInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('sendChatBtn').click(); });
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    document.querySelectorAll('.nav-item').forEach(btn => btn.addEventListener('click', () => switchPage(btn.dataset.page)));
+    
+    document.getElementById('showRegisterBtn')?.addEventListener('click', () => {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
     });
+    document.getElementById('showLoginBtn')?.addEventListener('click', () => {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+    });
+    document.getElementById('doLoginBtn')?.addEventListener('click', login);
+    document.getElementById('doRegisterBtn')?.addEventListener('click', register);
+    
+    // Модалка истории
+    document.getElementById('selectPhotoBtn')?.addEventListener('click', () => document.getElementById('photoStoryInput').click());
+    document.getElementById('selectVideoBtn')?.addEventListener('click', () => document.getElementById('videoStoryInput').click());
     document.getElementById('selectTextBtn')?.addEventListener('click', () => {
-        if (!checkMaintenance("добавление текстовой истории")) return;
         const text = prompt("Введите текст истории:");
         if (text) addStory('text', null, text);
         document.getElementById('storyModal').style.display = 'none';
+    });
+    document.getElementById('cancelStoryBtn')?.addEventListener('click', () => document.getElementById('storyModal').style.display = 'none');
+    document.getElementById('closeStoryBtn')?.addEventListener('click', () => {
+        document.getElementById('storyViewer').style.display = 'none';
+        const video = document.getElementById('storyVideoView');
+        if (video) video.pause();
     });
     document.getElementById('photoStoryInput')?.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -704,173 +1198,14 @@
             reader.readAsDataURL(file);
         }
     });
-    document.getElementById('cancelStoryBtn')?.addEventListener('click', () => document.getElementById('storyModal').style.display = 'none');
-    document.getElementById('closeStoryBtn')?.addEventListener('click', () => {
-        document.getElementById('storyViewer').style.display = 'none';
-        document.getElementById('storyVideoView')?.pause();
-    });
 
-    // ========== ЧАТЫ ==========
-    function renderUsersList() {
-        const container = document.getElementById('usersListContainer');
-        const availableUsers = otherUsers.filter(u => !bannedUsers.includes(u.id));
-        container.innerHTML = availableUsers.map(user => `
-            <div class="chat-item" data-user-id="${user.id}">
-                <div class="avatar">${user.avatar}</div>
-                <div class="chat-details">
-                    <div class="chat-name">${user.fullname}</div>
-                    <div style="font-size:12px;">${user.online ? '🟢 онлайн' : '⚫ не в сети'}</div>
-                </div>
-            </div>
-        `).join('');
-        document.querySelectorAll('[data-user-id]').forEach(el => {
-            el.addEventListener('click', () => openChat(el.dataset.userId));
-        });
+    // ========== ЗАПУСК ==========
+    deviceId = getDeviceId();
+    loadPlatformData();
+    
+    if (!checkAutoLogin()) {
+        showAuth();
     }
-
-    function getChatKey(u1, u2) { return [u1, u2].sort().join('_'); }
-    function openChat(userId) {
-        const user = otherUsers.find(u => u.id === userId);
-        if (!user || user.blocked) { showToast("Пользователь заблокирован"); return; }
-        document.getElementById('chatWindowTitle').innerText = user.fullname;
-        document.getElementById('chatWindow').style.display = 'flex';
-        window.currentChatPartner = user;
-        renderChatMessages(userId);
-        updateMaintenanceUI(); // обновляем состояние полей ввода
-    }
-    function renderChatMessages(otherId) {
-        const key = getChatKey(currentUser.id, otherId);
-        const msgs = privateMessages[key] || [];
-        const container = document.getElementById('chatMessagesArea');
-        container.innerHTML = msgs.map(msg => `
-            <div class="message ${msg.senderId === currentUser.id ? 'outgoing' : 'incoming'}">
-                <div class="bubble">${escapeHtml(msg.text)}<br><span style="font-size:10px;">${new Date(msg.time).toLocaleTimeString()}</span></div>
-            </div>
-        `).join('');
-        container.scrollTop = container.scrollHeight;
-    }
-    function sendMessage(otherId, text) {
-        if (!checkMaintenance("отправка сообщений")) return;
-        if (!text.trim()) return;
-        const key = getChatKey(currentUser.id, otherId);
-        if (!privateMessages[key]) privateMessages[key] = [];
-        privateMessages[key].push({ id: Date.now(), senderId: currentUser.id, text, time: new Date().toISOString() });
-        saveData();
-        renderChatMessages(otherId);
-        setTimeout(() => {
-            const replyKey = getChatKey(currentUser.id, otherId);
-            const replies = ["👍", "Понял!", "Круто!", "🔥"];
-            if (!privateMessages[replyKey]) privateMessages[replyKey] = [];
-            privateMessages[replyKey].push({ id: Date.now(), senderId: otherId, text: replies[Math.floor(Math.random()*replies.length)], time: new Date().toISOString() });
-            saveData();
-            if (window.currentChatPartner?.id === otherId) renderChatMessages(otherId);
-        }, 1500);
-    }
-
-    // ========== ПРОФИЛЬ ==========
-    function renderProfile() {
-        document.getElementById('profileContent').innerHTML = `
-            <div class="profile-header">
-                <div class="profile-avatar">${currentUser.avatar}</div>
-                <div style="font-size:24px; font-weight:700;">${currentUser.fullname}</div>
-                <div>${currentUser.bio}</div>
-                <div style="margin-top:8px;"><span class="admin-badge" style="background:white;">👑 Администратор</span></div>
-            </div>
-            <div style="background:white; margin:16px; border-radius:24px; padding:16px;">
-                <div><strong>📊 Статистика платформы</strong></div>
-                <div>👥 Пользователей: ${otherUsers.length}</div>
-                <div>📝 Постов: ${posts.length}</div>
-                <div>📸 Историй: ${stories.length}</div>
-                <div>🚫 Заблокировано: ${bannedUsers.length}</div>
-                <div>🔧 Режим техработ: ${maintenanceMode ? "ВКЛЮЧЁН" : "ВЫКЛЮЧЁН"}</div>
-            </div>
-        `;
-        document.getElementById('statsBadge').innerHTML = `👑 Админ`;
-    }
-
-    // ========== АДМИН-ПАНЕЛЬ ==========
-    function toggleMaintenance() {
-        maintenanceMode = !maintenanceMode;
-        saveData();
-        updateMaintenanceUI();
-        showToast(maintenanceMode ? "🔧 Режим техработ ВКЛЮЧЁН" : "✅ Режим техработ ВЫКЛЮЧЁН");
-        renderAdminPanel(); // обновляем кнопку
-        renderProfile();
-    }
-
-    const adminFunctions = [
-        { emoji: "🔧", name: "ТЕХРАБОТЫ", desc: maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ", action: toggleMaintenance },
-        { emoji: "👥", name: "Все пользователи", desc: "Список всех", action: () => showToast(`Пользователей: ${otherUsers.length}\n${otherUsers.map(u=>u.fullname).join(', ')}`) },
-        { emoji: "🚫", name: "Заблокировать", desc: "Блокировка юзера", action: () => { let name = prompt("Имя пользователя"); let u = otherUsers.find(u=>u.fullname.toLowerCase().includes(name.toLowerCase())); if(u){ bannedUsers.push(u.id); saveData(); showToast(`Заблокирован ${u.fullname}`); } } },
-        { emoji: "🔓", name: "Разблокировать", desc: "Снять блок", action: () => { if(bannedUsers.length){ let id=bannedUsers.pop(); showToast("Разблокирован"); saveData();} else showToast("Нет заблокированных"); } },
-        { emoji: "📝", name: "Создать пост", desc: "Опубликовать", action: () => { 
-            if(!checkMaintenance("создание постов")) return;
-            let text = prompt("Текст поста"); 
-            if(text){ posts.push({id:Date.now(), userId:currentUser.id, text, image:null, video:null, time:new Date().toISOString(), likes:0}); saveData(); renderFeed(); showToast("Пост создан!"); } 
-        } },
-        { emoji: "🗑️", name: "Удалить пост", desc: "По ID", action: () => { let id = prompt("ID поста"); let idx = posts.findIndex(p=>p.id==id); if(idx>=0){ posts.splice(idx,1); saveData(); renderFeed(); showToast("Удалено"); } } },
-        { emoji: "📸", name: "Удалить историю", desc: "Последнюю", action: () => { if(stories.length){ stories.shift(); saveData(); renderStories(); showToast("История удалена"); } } },
-        { emoji: "✏️", name: "Изменить имя", desc: "Своё имя", action: () => { let n = prompt("Новое имя", currentUser.fullname); if(n){ currentUser.fullname=n; currentUser.avatar=n.slice(0,2).toUpperCase(); saveData(); renderProfile(); renderFeed(); showToast("Имя изменено"); } } },
-        { emoji: "💬", name: "Глобальный чат", desc: "Всем сообщение", action: () => { 
-            if(!checkMaintenance("отправка сообщений")) return;
-            let msg = prompt("Сообщение всем"); 
-            if(msg){ otherUsers.forEach(u=>{ const key=getChatKey(currentUser.id,u.id); if(!privateMessages[key])privateMessages[key]=[]; privateMessages[key].push({id:Date.now(), senderId:currentUser.id, text:`[ADMIN] ${msg}`, time:new Date().toISOString()}); }); saveData(); showToast("Отправлено всем!"); } 
-        } },
-        { emoji: "🎁", name: "Бонус всем", desc: "+100 лайков", action: () => { posts.forEach(p=>p.likes+=100); saveData(); renderFeed(); showToast("Бонус начислен!"); } },
-        { emoji: "📊", name: "Статистика", desc: "Полный отчёт", action: () => { showToast(`📊 Постов:${posts.length} Историй:${stories.length} Юзеров:${otherUsers.length} Жалоб:${reportedPosts.length} Техработы:${maintenanceMode?"ВКЛ":"ВЫКЛ"}`); } },
-        { emoji: "📁", name: "Резервная копия", desc: "Экспорт", action: () => { let data = JSON.stringify({posts,stories,otherUsers,bannedUsers,maintenanceMode}); let blob=new Blob([data],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='backup.json'; a.click(); showToast("Бэкап создан"); } },
-        { emoji: "🔄", name: "Сброс данных", desc: "Очистить всё", action: () => { if(confirm("Удалить ВСЕ данные?")){ localStorage.clear(); location.reload(); } } }
-    ];
-
-    function renderAdminPanel() {
-        // Обновляем текст кнопки техработ
-        adminFunctions[0].desc = maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ";
-        const container = document.getElementById('adminGrid');
-        container.innerHTML = adminFunctions.map(f => `
-            <div class="admin-card" data-action="${f.name}">
-                <div class="emoji">${f.emoji}</div>
-                <div class="title">${f.name}</div>
-                <div class="desc">${f.desc}</div>
-            </div>
-        `).join('');
-        document.querySelectorAll('.admin-card').forEach((card, idx) => {
-            card.onclick = () => adminFunctions[idx].action();
-        });
-    }
-
-    // ========== НАВИГАЦИЯ ==========
-    function switchPage(pageId) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(`${pageId}Page`).classList.add('active-page');
-        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-        document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
-        if (pageId === 'feed') { renderFeed(); renderStories(); }
-        if (pageId === 'messages') renderUsersList();
-        if (pageId === 'admin') renderAdminPanel();
-        if (pageId === 'profile') renderProfile();
-        updateMaintenanceUI();
-    }
-
-    // ========== ОБРАБОТЧИКИ ==========
-    document.getElementById('closeChatBtn')?.addEventListener('click', () => document.getElementById('chatWindow').style.display = 'none');
-    document.getElementById('sendChatBtn')?.addEventListener('click', () => {
-        const input = document.getElementById('chatMessageInput');
-        if (input.value.trim() && window.currentChatPartner) {
-            sendMessage(window.currentChatPartner.id, input.value.trim());
-            input.value = '';
-        }
-    });
-    document.getElementById('chatMessageInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('sendChatBtn').click(); });
-    document.getElementById('logoutBtn')?.addEventListener('click', () => location.reload());
-    document.querySelectorAll('.nav-item').forEach(btn => btn.addEventListener('click', () => switchPage(btn.dataset.page)));
-
-    // Запуск
-    renderFeed();
-    renderStories();
-    renderUsersList();
-    renderProfile();
-    renderAdminPanel();
-    updateMaintenanceUI();
 </script>
 </body>
 </html>
