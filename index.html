@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Александровски — Пасхальное обновление 🥚</title>
+    <title>Александровски — Общение с людьми 🥚</title>
     <style>
         * {
             margin: 0;
@@ -396,6 +396,11 @@
             border-radius: 20px;
             cursor: pointer;
             border: 1px solid #FFD6A5;
+            transition: 0.2s;
+        }
+
+        .user-item:hover {
+            background: rgba(255, 235, 215, 0.95);
         }
 
         .user-avatar {
@@ -423,6 +428,10 @@
         .user-status {
             font-size: 12px;
             color: #888;
+        }
+
+        .user-status.online {
+            color: #4cd964;
         }
 
         .chat-window {
@@ -459,6 +468,8 @@
             padding: 10px 14px;
             border-radius: 20px;
             font-size: 14px;
+            max-width: 100%;
+            word-wrap: break-word;
         }
 
         .incoming .bubble {
@@ -468,6 +479,12 @@
         .outgoing .bubble {
             background: linear-gradient(135deg, #FFB347, #FF8C42);
             color: white;
+        }
+
+        .message-time {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 4px;
         }
 
         .input-container {
@@ -618,7 +635,6 @@
             color: #a0522d;
         }
 
-        /* Модальное окно для пароля */
         .password-overlay {
             position: fixed;
             top: 0;
@@ -718,15 +734,15 @@
     </div>
 
     <div id="maintenanceBanner" class="maintenance-banner">
-        🥚🔧 ПАСХАЛЬНЫЕ ТЕХРАБОТЫ 🔧🥚<br>
-        Публикация временно недоступна
+        🥚🔧 ТЕХНИЧЕСКИЕ РАБОТЫ 🔧🥚<br>
+        Публикация постов, историй и отправка сообщений временно недоступны
     </div>
 
     <div id="authContainer" class="auth-container">
         <div class="logo">
             <div class="logo-icon">🐣</div>
             <h2 style="color: #FF8C42;">Александровски</h2>
-            <p style="color: #a0522d; margin-top: 8px;">🐰 С ПАСХОЙ! 🥚</p>
+            <p style="color: #a0522d; margin-top: 8px;">🐰 Общайтесь с реальными людьми! 🥚</p>
         </div>
         <div id="loginForm">
             <div class="input-group"><input type="text" id="loginUsername" placeholder="Логин"></div>
@@ -847,6 +863,8 @@
     let deviceId = null;
     let adminSessionValid = false;
     let pendingAdminAction = null;
+    let currentChatPartner = null;
+    let syncInterval = null;
 
     function getDeviceId() {
         let id = localStorage.getItem('device_unique_id_easter');
@@ -868,23 +886,37 @@
         
         if (!platformData.userLikes) platformData.userLikes = {};
         if (!platformData.postComments) platformData.postComments = {};
+        if (!platformData.privateMessages) platformData.privateMessages = {};
         
         if (platformData.users.length === 0) {
-            platformData.users = [{
-                id: "admin_alex",
-                fullname: "Александр Епифанов 🐰",
-                login: "alex",
-                password: "admin123",
-                bio: "Создатель Александровски | С Пасхой! 🥚",
-                avatar: "🐣",
-                isAdmin: true,
-                isOnline: false,
-                lastSeen: new Date().toISOString()
-            }];
+            platformData.users = [
+                {
+                    id: "admin_alex",
+                    fullname: "Александр Епифанов 🐰",
+                    login: "alex",
+                    password: "admin123",
+                    bio: "Создатель Александровски | С Пасхой! 🥚",
+                    avatar: "🐣",
+                    isAdmin: true,
+                    isOnline: false,
+                    lastSeen: new Date().toISOString()
+                },
+                {
+                    id: "user_demo",
+                    fullname: "Мария Иванова 🐣",
+                    login: "maria",
+                    password: "123",
+                    bio: "Люблю общаться! 🌸",
+                    avatar: "МИ",
+                    isAdmin: false,
+                    isOnline: false,
+                    lastSeen: new Date().toISOString()
+                }
+            ];
             platformData.posts = [{
                 id: "p1",
                 userId: "admin_alex",
-                text: "🐣 С Пасхой! Христос Воскресе! 🥚🌸",
+                text: "🐣 С Пасхой! Христос Воскресе! 🥚🌸 Общайтесь с друзьями в чате! 💬",
                 time: new Date().toISOString(),
                 likes: 0
             }];
@@ -904,6 +936,51 @@
 
     function saveToLocal() {
         localStorage.setItem('alexandrovski_easter_data', JSON.stringify(platformData));
+    }
+
+    // ========== СИНХРОНИЗАЦИЯ ДЛЯ ВСЕХ ПОЛЬЗОВАТЕЛЕЙ ==========
+    function startSync() {
+        if (syncInterval) clearInterval(syncInterval);
+        syncInterval = setInterval(() => {
+            const saved = localStorage.getItem('alexandrovski_easter_data');
+            if (saved) {
+                try {
+                    const newData = JSON.parse(saved);
+                    // Проверяем изменился ли режим техработ
+                    if (newData.maintenanceMode !== platformData.maintenanceMode) {
+                        platformData.maintenanceMode = newData.maintenanceMode;
+                        updateMaintenanceUI();
+                        showToast(platformData.maintenanceMode ? "🔧 Технические работы начались!" : "✅ Технические работы завершены!");
+                    }
+                    // Обновляем сообщения
+                    if (JSON.stringify(newData.privateMessages) !== JSON.stringify(platformData.privateMessages)) {
+                        platformData.privateMessages = newData.privateMessages;
+                        if (currentChatPartner) {
+                            renderChatMessages(currentChatPartner.id);
+                        }
+                        renderUsersList();
+                    }
+                    platformData.posts = newData.posts;
+                    platformData.stories = newData.stories;
+                    platformData.userLikes = newData.userLikes;
+                    platformData.postComments = newData.postComments;
+                    platformData.bannedUsers = newData.bannedUsers;
+                    platformData.users = newData.users;
+                    
+                    if (document.getElementById('feedPage').classList.contains('active-page')) {
+                        renderFeed();
+                        renderStories();
+                    }
+                    if (document.getElementById('messagesPage').classList.contains('active-page')) {
+                        renderUsersList();
+                    }
+                    if (document.getElementById('profilePage').classList.contains('active-page')) {
+                        renderProfile();
+                    }
+                    updateOnlineCount();
+                } catch(e) {}
+            }
+        }, 3000);
     }
 
     // ========== СЕССИЯ ==========
@@ -979,7 +1056,6 @@
         showAdminPasswordModal(callback);
     }
 
-    // Обработчики для модального окна
     document.getElementById('submitAdminPasswordBtn')?.addEventListener('click', () => {
         const password = document.getElementById('adminPasswordInput').value;
         if (password === '2016') {
@@ -1000,7 +1076,6 @@
         pendingAdminAction = null;
     });
 
-    // Закрытие по Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             hideAdminPasswordModal();
@@ -1055,17 +1130,27 @@
         }
     }
 
-    // ========== РЕЖИМ ТЕХРАБОТ ==========
+    // ========== РЕЖИМ ТЕХРАБОТ (СИНХРОНИЗИРУЕТСЯ ДЛЯ ВСЕХ) ==========
     function updateMaintenanceUI() {
         const banner = document.getElementById('maintenanceBanner');
-        if (platformData.maintenanceMode) {
+        const isMaintenance = platformData.maintenanceMode;
+        
+        if (isMaintenance) {
             banner.style.display = 'block';
             const msgInput = document.getElementById('chatMessageInput');
             if (msgInput) msgInput.disabled = true;
+            const sendBtn = document.getElementById('sendChatBtn');
+            if (sendBtn) sendBtn.disabled = true;
+            const addStoryCircle = document.getElementById('addStoryCircle');
+            if (addStoryCircle) addStoryCircle.style.opacity = '0.5';
         } else {
             banner.style.display = 'none';
             const msgInput = document.getElementById('chatMessageInput');
             if (msgInput) msgInput.disabled = false;
+            const sendBtn = document.getElementById('sendChatBtn');
+            if (sendBtn) sendBtn.disabled = false;
+            const addStoryCircle = document.getElementById('addStoryCircle');
+            if (addStoryCircle) addStoryCircle.style.opacity = '1';
         }
     }
 
@@ -1073,13 +1158,14 @@
         platformData.maintenanceMode = !platformData.maintenanceMode;
         saveData();
         updateMaintenanceUI();
-        showToast(platformData.maintenanceMode ? "🥚 Пасхальные техработы ВКЛЮЧЕНЫ 🐣" : "🐰 Пасхальные техработы ВЫКЛЮЧЕНЫ 🌸");
+        showToast(platformData.maintenanceMode ? "🥚 Пасхальные техработы ВКЛЮЧЕНЫ ДЛЯ ВСЕХ 🐣" : "🐰 Пасхальные техработы ВЫКЛЮЧЕНЫ ДЛЯ ВСЕХ 🌸");
         renderAdminPanel();
+        renderProfile();
     }
 
     function checkMaintenance(actionName) {
         if (platformData.maintenanceMode) {
-            showToast(`🥚 Пасхальные работы! ${actionName} временно недоступно 🐣`);
+            showToast(`🥚 Технические работы! ${actionName} временно недоступно 🐣`);
             return false;
         }
         return true;
@@ -1203,6 +1289,7 @@
         renderProfile();
         if (currentUser.isAdmin) renderAdminPanel();
         updateMaintenanceUI();
+        startSync();
         switchPage('feed');
     }
 
@@ -1346,7 +1433,7 @@
         const otherUsers = platformData.users.filter(u => u.id !== currentUser.id && !platformData.bannedUsers.includes(u.id));
         
         if (otherUsers.length === 0) {
-            container.innerHTML = `<div class="empty-state">🐣 Пока нет других пользователей<br>Пригласите друзей отметить Пасху! 🥚</div>`;
+            container.innerHTML = `<div class="empty-state">🐣 Пока нет других пользователей<br>Пригласите друзей зарегистрироваться! 🥚</div>`;
             return;
         }
         
@@ -1355,7 +1442,9 @@
                 <div class="user-avatar">${user.avatar || "🥚"}</div>
                 <div class="user-info">
                     <div class="user-name">${escapeHtml(user.fullname)}</div>
-                    <div class="user-status">${user.isOnline ? '🟢 онлайн 🐣' : '⚫ был(а) ' + formatTimeAgo(user.lastSeen)}</div>
+                    <div class="user-status ${user.isOnline ? 'online' : ''}">
+                        ${user.isOnline ? '🟢 онлайн 🐣' : '⚫ был(а) ' + formatTimeAgo(user.lastSeen)}
+                    </div>
                 </div>
             </div>
         `).join('');
@@ -1372,7 +1461,7 @@
         if (!user) return;
         document.getElementById('chatWindowTitle').innerHTML = `${escapeHtml(user.fullname)} ${user.isOnline ? '🐣' : '🥚'}`;
         document.getElementById('chatWindow').style.display = 'flex';
-        window.currentChatPartner = user;
+        currentChatPartner = user;
         renderChatMessages(userId);
         updateMaintenanceUI();
     }
@@ -1383,7 +1472,7 @@
         const container = document.getElementById('chatMessagesArea');
         
         if (msgs.length === 0) {
-            container.innerHTML = '<div class="empty-state">🐰 Напишите пасхальное поздравление! 🥚</div>';
+            container.innerHTML = '<div class="empty-state">🐰 Напишите первое сообщение! 🥚</div>';
             return;
         }
         
@@ -1391,13 +1480,31 @@
             <div class="message ${msg.senderId === currentUser.id ? 'outgoing' : 'incoming'}">
                 <div class="bubble">
                     ${escapeHtml(msg.text)}
-                    <div style="font-size:10px; opacity:0.7; margin-top:4px;">
+                    <div class="message-time">
                         ${new Date(msg.time).toLocaleTimeString()}
+                        ${msg.read && msg.senderId !== currentUser.id ? ' ✓✓' : ''}
                     </div>
                 </div>
             </div>
         `).join('');
         container.scrollTop = container.scrollHeight;
+    }
+    
+    function markMessagesAsRead(otherId) {
+        const key = getChatKey(currentUser.id, otherId);
+        if (platformData.privateMessages[key]) {
+            let updated = false;
+            platformData.privateMessages[key].forEach(msg => {
+                if (msg.senderId !== currentUser.id && !msg.read) {
+                    msg.read = true;
+                    updated = true;
+                }
+            });
+            if (updated) {
+                saveData();
+                renderChatMessages(otherId);
+            }
+        }
     }
     
     function sendMessage(otherId, text) {
@@ -1419,7 +1526,7 @@
         renderChatMessages(otherId);
         
         const receiver = platformData.users.find(u => u.id === otherId);
-        showToast(`🐣 Пасхальное сообщение отправлено ${receiver?.fullname} 🥚`);
+        showToast(`🐣 Сообщение отправлено ${receiver?.fullname} 🥚`);
         
         document.getElementById('chatMessageInput').value = '';
     }
@@ -1450,7 +1557,7 @@
 
     // ========== АДМИН-ПАНЕЛЬ ==========
     const adminFunctions = [
-        { emoji: "🔧🥚", name: "ТЕХРАБОТЫ", desc: platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ", action: () => checkAdminAccess(toggleMaintenance) },
+        { emoji: "🔧🥚", name: "ТЕХРАБОТЫ", desc: platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ (ДЛЯ ВСЕХ)" : "🟢 ВКЛЮЧИТЬ (ДЛЯ ВСЕХ)", action: () => checkAdminAccess(toggleMaintenance) },
         { emoji: "🐣", name: "Все пользователи", desc: "Список всех", action: () => checkAdminAccess(() => showToast(`Пользователей: ${platformData.users.length}\n${platformData.users.map(u=>u.fullname).join(', ')}`)) },
         { emoji: "🚫🥚", name: "Заблокировать", desc: "Блокировка юзера", action: () => checkAdminAccess(() => { let name = prompt("Имя пользователя"); let u = platformData.users.find(u=>u.fullname.toLowerCase().includes(name.toLowerCase())); if(u && !u.isAdmin){ platformData.bannedUsers.push(u.id); saveData(); showToast(`Заблокирован ${u.fullname}`); renderUsersList(); } else showToast("Пользователь не найден"); }) },
         { emoji: "🔓🐣", name: "Разблокировать", desc: "Снять блок", action: () => checkAdminAccess(() => { if(platformData.bannedUsers.length){ platformData.bannedUsers.pop(); saveData(); showToast("Разблокирован"); renderUsersList();} else showToast("Нет заблокированных"); }) },
@@ -1485,7 +1592,7 @@
     ];
 
     function renderAdminPanel() {
-        adminFunctions[0].desc = platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ";
+        adminFunctions[0].desc = platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ (ДЛЯ ВСЕХ)" : "🟢 ВКЛЮЧИТЬ (ДЛЯ ВСЕХ)";
         const container = document.getElementById('adminGrid');
         container.innerHTML = adminFunctions.map(f => `
             <div class="admin-card" data-action="${f.name}">
@@ -1495,7 +1602,6 @@
             </div>
         `).join('');
         
-        // Привязываем обработчики к каждой карточке
         document.querySelectorAll('.admin-card').forEach((card, idx) => {
             card.onclick = () => adminFunctions[idx].action();
         });
@@ -1518,14 +1624,26 @@
     }
 
     // ========== ОБРАБОТЧИКИ ==========
-    document.getElementById('closeChatBtn')?.addEventListener('click', () => document.getElementById('chatWindow').style.display = 'none');
+    document.getElementById('closeChatBtn')?.addEventListener('click', () => {
+        document.getElementById('chatWindow').style.display = 'none';
+        if (currentChatPartner) {
+            markMessagesAsRead(currentChatPartner.id);
+        }
+        currentChatPartner = null;
+    });
+    
     document.getElementById('sendChatBtn')?.addEventListener('click', () => {
         const input = document.getElementById('chatMessageInput');
-        if (input.value.trim() && window.currentChatPartner) {
-            sendMessage(window.currentChatPartner.id, input.value.trim());
+        if (input.value.trim() && currentChatPartner) {
+            sendMessage(currentChatPartner.id, input.value.trim());
+            input.value = '';
         }
     });
-    document.getElementById('chatMessageInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('sendChatBtn').click(); });
+    
+    document.getElementById('chatMessageInput')?.addEventListener('keypress', (e) => { 
+        if (e.key === 'Enter') document.getElementById('sendChatBtn').click(); 
+    });
+    
     document.getElementById('logoutBtn')?.addEventListener('click', logout);
     document.querySelectorAll('.nav-item').forEach(btn => btn.addEventListener('click', () => switchPage(btn.dataset.page)));
     
