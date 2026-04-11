@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Александровски — Христос Воскрес! 🥚✨</title>
+    <title>Александровски — Пасхальное обновление 🥚</title>
     <style>
         * {
             margin: 0;
@@ -14,77 +14,73 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f5e6d3 0%, #ffe8d4 100%);
+            background: linear-gradient(135deg, #FFF5E6 0%, #FFE4D6 100%);
             height: 100vh;
             overflow: hidden;
             position: relative;
         }
 
-        /* Пасхальные украшения фона */
         body::before {
             content: "🐣";
             position: fixed;
-            bottom: 20px;
+            bottom: 10px;
             left: 10px;
-            font-size: 40px;
-            opacity: 0.3;
+            font-size: 35px;
+            opacity: 0.4;
             pointer-events: none;
-            animation: bounce 3s infinite;
+            animation: bounce 2s infinite;
         }
 
         body::after {
             content: "🌸";
             position: fixed;
-            top: 20px;
+            top: 10px;
             right: 10px;
-            font-size: 35px;
-            opacity: 0.3;
+            font-size: 30px;
+            opacity: 0.4;
             pointer-events: none;
-            animation: sway 4s infinite;
+            animation: sway 3s infinite;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
         @keyframes sway {
             0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(15deg); }
+            50% { transform: rotate(10deg); }
         }
 
         .app {
             max-width: 500px;
             margin: 0 auto;
-            background: rgba(255, 248, 235, 0.95);
+            background: rgba(255, 245, 235, 0.95);
             height: 100%;
             display: flex;
             flex-direction: column;
             position: relative;
-            backdrop-filter: blur(2px);
         }
 
-        /* Пасхальная шапка */
         .header {
-            background: linear-gradient(135deg, #f7a1c4, #ffd6a5);
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
             padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             color: #5a3e2b;
             z-index: 10;
-            border-bottom: 3px solid #ffecb3;
+            border-bottom: 3px solid #FFD700;
             position: relative;
-            overflow: hidden;
         }
 
         .header::before {
-            content: "🐰🐣🥚";
+            content: "🐰🥚🐣";
             position: absolute;
-            right: -20px;
-            top: -10px;
-            font-size: 50px;
-            opacity: 0.15;
+            right: 10px;
+            top: -5px;
+            font-size: 35px;
+            opacity: 0.2;
             pointer-events: none;
         }
 
@@ -100,8 +96,8 @@
         }
 
         .admin-badge {
-            background: #ffd700;
-            color: #d2691e;
+            background: #FFD700;
+            color: #FF8C42;
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 11px;
@@ -115,17 +111,14 @@
             border-radius: 20px;
         }
 
-        /* Пасхальный баннер техработ */
         .maintenance-banner {
-            background: linear-gradient(135deg, #ff9a3c, #ff6b35);
+            background: linear-gradient(135deg, #FF6B6B, #FF4757);
             color: white;
             text-align: center;
             padding: 10px;
             font-size: 13px;
-            font-weight: 500;
             display: none;
             animation: pulse 1s infinite;
-            border-bottom: 2px solid #ffecb3;
         }
 
         @keyframes pulse {
@@ -139,7 +132,7 @@
             flex-direction: column;
             justify-content: center;
             padding: 32px 24px;
-            background: rgba(255, 248, 235, 0.95);
+            background: rgba(255, 245, 235, 0.95);
             overflow-y: auto;
         }
 
@@ -151,14 +144,13 @@
         .logo-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #f7a1c4, #ffd6a5);
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
             margin: 0 auto 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             animation: eggWobble 2s infinite;
         }
 
@@ -175,7 +167,7 @@
         .input-group input, .input-group textarea {
             width: 100%;
             padding: 14px 16px;
-            border: 2px solid #ffd6a5;
+            border: 2px solid #FFD6A5;
             border-radius: 30px;
             font-size: 16px;
             background: white;
@@ -183,7 +175,7 @@
         }
 
         .input-group input:focus {
-            border-color: #f7a1c4;
+            border-color: #FFB347;
         }
 
         .checkbox-group {
@@ -196,8 +188,8 @@
         .btn {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #f7a1c4, #ffd6a5);
-            color: #5a3e2b;
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
+            color: white;
             border: none;
             border-radius: 30px;
             font-size: 16px;
@@ -210,8 +202,7 @@
         .btn:active { transform: scale(0.98); }
 
         .btn-danger {
-            background: linear-gradient(135deg, #ff9a3c, #ff6b35);
-            color: white;
+            background: linear-gradient(135deg, #FF6B6B, #FF4757);
         }
 
         .switch-auth {
@@ -221,7 +212,7 @@
         }
 
         .switch-auth span {
-            color: #d2691e;
+            color: #FF8C42;
             cursor: pointer;
             font-weight: 600;
         }
@@ -234,11 +225,11 @@
         }
 
         .bottom-nav {
-            background: rgba(255, 248, 235, 0.98);
+            background: rgba(255, 245, 235, 0.98);
             display: flex;
             justify-content: space-around;
             padding: 10px 16px 16px;
-            border-top: 2px solid #ffd6a5;
+            border-top: 2px solid #FFD6A5;
         }
 
         .nav-item {
@@ -254,7 +245,7 @@
         }
 
         .nav-item.active {
-            color: #f7a1c4;
+            color: #FF8C42;
         }
 
         .nav-icon {
@@ -271,22 +262,6 @@
             display: block;
         }
 
-        /* Пасхальные яйца вместо аватаров */
-        .story-avatar, .user-avatar, .profile-avatar, .card-avatar {
-            background: linear-gradient(135deg, #ffd6a5, #f7a1c4) !important;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .story-avatar::after, .user-avatar::after, .profile-avatar::after {
-            content: "🥚";
-            position: absolute;
-            font-size: 20px;
-            opacity: 0.3;
-            bottom: 0;
-            right: 0;
-        }
-
         .admin-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -295,14 +270,13 @@
         }
 
         .admin-card {
-            background: linear-gradient(135deg, white, #fff8f0);
+            background: white;
             border-radius: 20px;
             padding: 16px;
             cursor: pointer;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #FFD6A5;
             transition: 0.2s;
-            border: 1px solid #ffd6a5;
         }
 
         .admin-card:active { transform: scale(0.97); }
@@ -311,13 +285,13 @@
         .admin-card .desc { font-size: 11px; color: #888; margin-top: 4px; }
 
         .stories-row {
-            background: rgba(255, 248, 235, 0.9);
+            background: rgba(255, 245, 235, 0.9);
             padding: 16px;
             overflow-x: auto;
             white-space: nowrap;
             display: flex;
             gap: 16px;
-            border-bottom: 1px solid #ffd6a5;
+            border-bottom: 1px solid #FFD6A5;
         }
 
         .story-circle {
@@ -332,20 +306,21 @@
             width: 70px;
             height: 70px;
             border-radius: 50%;
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 32px;
             color: white;
-            border: 3px solid #ffd700;
+            border: 3px solid #FFD700;
             background-size: cover;
             background-position: center;
         }
 
         .story-avatar.add {
-            background: #f0f2f5 !important;
-            border: 2px dashed #f7a1c4;
-            color: #f7a1c4;
+            background: #f0f2f5;
+            border: 2px dashed #FFB347;
+            color: #FFB347;
         }
 
         .story-viewer {
@@ -397,8 +372,8 @@
         }
 
         .story-modal button {
-            background: linear-gradient(135deg, #f7a1c4, #ffd6a5);
-            color: #5a3e2b;
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
+            color: white;
             border: none;
             padding: 14px 28px;
             border-radius: 30px;
@@ -416,17 +391,18 @@
             align-items: center;
             padding: 14px 16px;
             gap: 14px;
-            background: rgba(255, 248, 235, 0.9);
+            background: rgba(255, 245, 235, 0.95);
             margin: 8px 12px;
             border-radius: 20px;
             cursor: pointer;
-            border: 1px solid #ffd6a5;
+            border: 1px solid #FFD6A5;
         }
 
         .user-avatar {
             width: 52px;
             height: 52px;
             border-radius: 50%;
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -453,7 +429,7 @@
             display: none;
             flex-direction: column;
             height: 100%;
-            background: rgba(255, 248, 235, 0.98);
+            background: rgba(255, 245, 235, 0.98);
             position: absolute;
             top: 0;
             left: 0;
@@ -487,35 +463,35 @@
 
         .incoming .bubble {
             background: white;
-            border: 1px solid #ffd6a5;
+            border: 1px solid #FFD6A5;
         }
         .outgoing .bubble {
-            background: linear-gradient(135deg, #f7a1c4, #ffd6a5);
-            color: #5a3e2b;
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
+            color: white;
         }
 
         .input-container {
-            background: rgba(255, 248, 235, 0.95);
+            background: rgba(255, 245, 235, 0.95);
             padding: 12px;
             display: flex;
             gap: 10px;
-            border-top: 1px solid #ffd6a5;
+            border-top: 1px solid #FFD6A5;
         }
 
         .input-container input {
             flex: 1;
             padding: 12px;
-            border: 2px solid #ffd6a5;
+            border: 2px solid #FFD6A5;
             background: white;
             border-radius: 30px;
             outline: none;
         }
 
         .profile-header {
-            background: linear-gradient(135deg, #f7a1c4, #ffd6a5);
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
             padding: 32px 20px;
             text-align: center;
-            color: #5a3e2b;
+            color: white;
         }
 
         .profile-avatar {
@@ -528,14 +504,15 @@
             align-items: center;
             justify-content: center;
             font-size: 48px;
+            color: #FF8C42;
         }
 
         .feed-card {
-            background: rgba(255, 248, 235, 0.95);
+            background: rgba(255, 245, 235, 0.95);
             margin: 12px 16px;
             border-radius: 24px;
             overflow: hidden;
-            border: 1px solid #ffd6a5;
+            border: 1px solid #FFD6A5;
         }
 
         .card-header {
@@ -549,19 +526,84 @@
             padding: 0 12px 12px;
         }
 
+        .card-actions {
+            padding: 12px;
+            border-top: 1px solid #FFD6A5;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .like-btn, .comment-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #888;
+            transition: 0.2s;
+        }
+
+        .like-btn.liked {
+            color: #FF4757;
+        }
+
+        .like-btn:active, .comment-btn:active { transform: scale(1.05); }
+
+        .comments-section {
+            padding: 12px;
+            border-top: 1px solid #FFD6A5;
+            background: rgba(255, 245, 235, 0.8);
+        }
+
+        .comment {
+            padding: 8px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #FFD6A5;
+        }
+
+        .comment strong {
+            color: #FF8C42;
+        }
+
+        .add-comment {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .add-comment input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #FFD6A5;
+            border-radius: 20px;
+            background: white;
+            outline: none;
+        }
+
+        .add-comment button {
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+        }
+
         .toast {
             position: fixed;
             bottom: 80px;
             left: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #f7a1c4, #ffd6a5);
-            color: #5a3e2b;
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
+            color: white;
             padding: 12px;
             border-radius: 30px;
             text-align: center;
             z-index: 2000;
             animation: fadeOut 2s forwards;
-            font-weight: 500;
         }
 
         @keyframes fadeOut {
@@ -576,7 +618,71 @@
             color: #a0522d;
         }
 
-        /* Пасхальный стикер-пак */
+        /* Модальное окно для пароля */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-modal {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            width: 280px;
+            animation: bounceIn 0.3s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .password-modal h3 {
+            color: #FF8C42;
+            margin-bottom: 15px;
+        }
+
+        .password-modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #FFD6A5;
+            border-radius: 30px;
+            text-align: center;
+            font-size: 18px;
+            outline: none;
+        }
+
+        .password-modal input:focus {
+            border-color: #FFB347;
+        }
+
+        .password-modal button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #FFB347, #FF8C42);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .password-modal .cancel-btn {
+            background: #ccc;
+            color: #333;
+        }
+
         .easter-sticker {
             display: inline-block;
             font-size: 28px;
@@ -590,14 +696,14 @@
         }
 
         .sticker-panel {
-            background: rgba(255, 248, 235, 0.95);
+            background: rgba(255, 245, 235, 0.95);
             border-radius: 20px;
             padding: 10px;
-            margin-top: 5px;
+            margin: 5px 12px;
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            border: 1px solid #ffd6a5;
+            border: 1px solid #FFD6A5;
         }
     </style>
 </head>
@@ -619,12 +725,12 @@
     <div id="authContainer" class="auth-container">
         <div class="logo">
             <div class="logo-icon">🐣</div>
-            <h2 style="color: #d2691e;">Александровски</h2>
+            <h2 style="color: #FF8C42;">Александровски</h2>
             <p style="color: #a0522d; margin-top: 8px;">🐰 С ПАСХОЙ! 🥚</p>
         </div>
         <div id="loginForm">
-            <div class="input-group"><input type="text" id="loginUsername" placeholder="Логин" value="alex"></div>
-            <div class="input-group"><input type="password" id="loginPassword" placeholder="Пароль" value="admin123"></div>
+            <div class="input-group"><input type="text" id="loginUsername" placeholder="Логин"></div>
+            <div class="input-group"><input type="password" id="loginPassword" placeholder="Пароль"></div>
             <div class="checkbox-group">
                 <input type="checkbox" id="rememberMeLogin">
                 <label>🔐 Запомнить меня на этом устройстве</label>
@@ -672,8 +778,8 @@
     </div>
 
     <div id="chatWindow" class="chat-window">
-        <div class="header" style="background: linear-gradient(135deg, #f7a1c4, #ffd6a5);">
-            <button id="closeChatBtn" style="background:none; border:none; color:#5a3e2b; font-size:28px;">←</button>
+        <div class="header" style="background: linear-gradient(135deg, #FFB347, #FF8C42);">
+            <button id="closeChatBtn" style="background:none; border:none; color:white; font-size:28px;">←</button>
             <div style="flex:1"><span id="chatWindowTitle">Чат</span></div>
             <button id="showStickersBtn" style="background:none; border:none; font-size:24px; cursor:pointer;">🐣</button>
         </div>
@@ -687,10 +793,12 @@
             <span class="easter-sticker" data-sticker="🐥">🐥</span>
             <span class="easter-sticker" data-sticker="💐">💐</span>
             <span class="easter-sticker" data-sticker="✨">✨</span>
+            <span class="easter-sticker" data-sticker="🎀">🎀</span>
+            <span class="easter-sticker" data-sticker="⭐">⭐</span>
         </div>
         <div class="input-container">
             <input type="text" id="chatMessageInput" placeholder="Сообщение...">
-            <button id="sendChatBtn" style="background: linear-gradient(135deg, #f7a1c4, #ffd6a5); border:none; width:44px; border-radius:50%; color:#5a3e2b;">➤</button>
+            <button id="sendChatBtn" style="background: linear-gradient(135deg, #FFB347, #FF8C42); border:none; width:44px; border-radius:50%; color:white;">➤</button>
         </div>
     </div>
 
@@ -702,46 +810,64 @@
     </div>
 
     <div id="storyModal" class="story-modal">
-        <button id="selectPhotoBtn">📷 Выбрать фото с пасхальной рамкой</button>
+        <button id="selectPhotoBtn">📷 Выбрать фото</button>
         <button id="selectVideoBtn">🎥 Выбрать видео</button>
         <button id="selectTextBtn">📝 Пасхальное поздравление</button>
         <button id="cancelStoryBtn" style="background:#555;">Отмена</button>
         <input type="file" id="photoStoryInput" accept="image/*" style="display:none">
         <input type="file" id="videoStoryInput" accept="video/*" style="display:none">
     </div>
+
+    <!-- Модальное окно для пароля админа -->
+    <div id="adminPasswordOverlay" class="password-overlay">
+        <div class="password-modal">
+            <div style="font-size: 48px; margin-bottom: 10px;">👑</div>
+            <h3>Введите пароль администратора</h3>
+            <input type="password" id="adminPasswordInput" placeholder="Пароль" autocomplete="off">
+            <button id="submitAdminPasswordBtn">Подтвердить</button>
+            <button id="cancelAdminPasswordBtn" class="cancel-btn">Отмена</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // ========== ПАСХАЛЬНЫЕ СТИКЕРЫ ==========
+    // ========== ДАННЫЕ ==========
     let platformData = {
         users: [],
         posts: [],
         stories: [],
         privateMessages: {},
         bannedUsers: [],
-        maintenanceMode: false
+        maintenanceMode: false,
+        userLikes: {},
+        postComments: {}
     };
-
+    
     let currentUser = null;
     let deviceId = null;
+    let adminSessionValid = false;
+    let pendingAdminAction = null;
 
     function getDeviceId() {
-        let id = localStorage.getItem('device_unique_id');
+        let id = localStorage.getItem('device_unique_id_easter');
         if (!id) {
             id = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('device_unique_id', id);
+            localStorage.setItem('device_unique_id_easter', id);
         }
         return id;
     }
 
     function loadData() {
-        const saved = localStorage.getItem('alexandrovski_data_easter');
+        const saved = localStorage.getItem('alexandrovski_easter_data');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
                 platformData = parsed;
-            } catch(e) { console.log("Ошибка загрузки"); }
+            } catch(e) {}
         }
+        
+        if (!platformData.userLikes) platformData.userLikes = {};
+        if (!platformData.postComments) platformData.postComments = {};
         
         if (platformData.users.length === 0) {
             platformData.users = [{
@@ -753,50 +879,52 @@
                 avatar: "🐣",
                 isAdmin: true,
                 isOnline: false,
-                lastSeen: new Date().toISOString(),
-                deviceId: null
+                lastSeen: new Date().toISOString()
             }];
+            platformData.posts = [{
+                id: "p1",
+                userId: "admin_alex",
+                text: "🐣 С Пасхой! Христос Воскресе! 🥚🌸",
+                time: new Date().toISOString(),
+                likes: 0
+            }];
+            platformData.stories = [];
+            platformData.privateMessages = {};
+            platformData.bannedUsers = [];
+            platformData.maintenanceMode = false;
+            saveData();
         }
         
-        platformData.users.forEach(user => {
-            if (user.isOnline === undefined) user.isOnline = false;
-            if (!user.lastSeen) user.lastSeen = new Date().toISOString();
-            if (!user.avatar) user.avatar = "🥚";
-            if (user.deviceId === undefined) user.deviceId = null;
-        });
-        
-        if (!platformData.posts) platformData.posts = [];
-        if (!platformData.stories) platformData.stories = [];
-        if (!platformData.privateMessages) platformData.privateMessages = {};
-        if (!platformData.bannedUsers) platformData.bannedUsers = [];
-        if (platformData.maintenanceMode === undefined) platformData.maintenanceMode = false;
-        
-        saveData();
-        updateMaintenanceUI();
+        saveToLocal();
     }
 
     function saveData() {
-        localStorage.setItem('alexandrovski_data_easter', JSON.stringify(platformData));
+        localStorage.setItem('alexandrovski_easter_data', JSON.stringify(platformData));
     }
 
+    function saveToLocal() {
+        localStorage.setItem('alexandrovski_easter_data', JSON.stringify(platformData));
+    }
+
+    // ========== СЕССИЯ ==========
     function saveSession(userId, remember) {
         const sessionData = { userId: userId, deviceId: deviceId, timestamp: Date.now() };
         if (remember) {
-            localStorage.setItem('alexandrovski_session_easter', JSON.stringify(sessionData));
+            localStorage.setItem('alexandrovski_easter_session', JSON.stringify(sessionData));
         } else {
-            sessionStorage.setItem('alexandrovski_session_easter', JSON.stringify(sessionData));
+            sessionStorage.setItem('alexandrovski_easter_session', JSON.stringify(sessionData));
         }
     }
 
     function getSessionUserId() {
-        let sessionStr = sessionStorage.getItem('alexandrovski_session_easter');
+        let sessionStr = sessionStorage.getItem('alexandrovski_easter_session');
         if (sessionStr) {
             try {
                 const session = JSON.parse(sessionStr);
                 if (session.deviceId === deviceId) return session.userId;
             } catch(e) {}
         }
-        sessionStr = localStorage.getItem('alexandrovski_session_easter');
+        sessionStr = localStorage.getItem('alexandrovski_easter_session');
         if (sessionStr) {
             try {
                 const session = JSON.parse(sessionStr);
@@ -807,8 +935,9 @@
     }
 
     function clearSession() {
-        sessionStorage.removeItem('alexandrovski_session_easter');
-        localStorage.removeItem('alexandrovski_session_easter');
+        sessionStorage.removeItem('alexandrovski_easter_session');
+        localStorage.removeItem('alexandrovski_easter_session');
+        adminSessionValid = false;
     }
 
     function checkAutoLogin() {
@@ -816,11 +945,6 @@
         if (userId) {
             const user = platformData.users.find(u => u.id === userId);
             if (user) {
-                if (user.deviceId && user.deviceId !== deviceId) {
-                    showToast("🥚 Этот аккаунт уже используется на другом устройстве");
-                    clearSession();
-                    return false;
-                }
                 currentUser = user;
                 currentUser.isOnline = true;
                 currentUser.lastSeen = new Date().toISOString();
@@ -832,6 +956,106 @@
         return false;
     }
 
+    // ========== АДМИН ПАРОЛЬ ==========
+    function showAdminPasswordModal(callback) {
+        pendingAdminAction = callback;
+        const overlay = document.getElementById('adminPasswordOverlay');
+        const input = document.getElementById('adminPasswordInput');
+        input.value = '';
+        overlay.style.display = 'flex';
+        input.focus();
+    }
+
+    function hideAdminPasswordModal() {
+        document.getElementById('adminPasswordOverlay').style.display = 'none';
+        pendingAdminAction = null;
+    }
+
+    function checkAdminAccess(callback) {
+        if (adminSessionValid) {
+            callback();
+            return;
+        }
+        showAdminPasswordModal(callback);
+    }
+
+    // Обработчики для модального окна
+    document.getElementById('submitAdminPasswordBtn')?.addEventListener('click', () => {
+        const password = document.getElementById('adminPasswordInput').value;
+        if (password === '2016') {
+            adminSessionValid = true;
+            hideAdminPasswordModal();
+            if (pendingAdminAction) {
+                pendingAdminAction();
+                pendingAdminAction = null;
+            }
+        } else {
+            showToast("❌ Неверный пароль!");
+            document.getElementById('adminPasswordInput').value = '';
+        }
+    });
+
+    document.getElementById('cancelAdminPasswordBtn')?.addEventListener('click', () => {
+        hideAdminPasswordModal();
+        pendingAdminAction = null;
+    });
+
+    // Закрытие по Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            hideAdminPasswordModal();
+        }
+    });
+
+    // ========== ЛАЙКИ ==========
+    function toggleLike(postId) {
+        const likeKey = `${postId}_${currentUser.id}`;
+        const post = platformData.posts.find(p => p.id === postId);
+        
+        if (platformData.userLikes[likeKey]) {
+            delete platformData.userLikes[likeKey];
+            if (post) post.likes = Math.max(0, (post.likes || 0) - 1);
+            showToast("❤️ Лайк убран");
+        } else {
+            platformData.userLikes[likeKey] = true;
+            if (post) post.likes = (post.likes || 0) + 1;
+            showToast("🥚 Пасхальный лайк поставлен! 🐣");
+        }
+        
+        saveData();
+        renderFeed();
+    }
+
+    // ========== КОММЕНТАРИИ ==========
+    function addComment(postId, text) {
+        if (!text.trim()) return;
+        if (!platformData.postComments[postId]) platformData.postComments[postId] = [];
+        
+        platformData.postComments[postId].push({
+            id: Date.now(),
+            userId: currentUser.id,
+            userName: currentUser.fullname,
+            text: text.trim(),
+            time: new Date().toISOString()
+        });
+        
+        saveData();
+        renderFeed();
+        showToast("🐣 Комментарий добавлен!");
+    }
+
+    function toggleComments(postId) {
+        const commentsDiv = document.getElementById(`comments-${postId}`);
+        if (commentsDiv) {
+            if (commentsDiv.style.display === 'none') {
+                commentsDiv.style.display = 'block';
+            } else {
+                commentsDiv.style.display = 'none';
+            }
+        }
+    }
+
+    // ========== РЕЖИМ ТЕХРАБОТ ==========
     function updateMaintenanceUI() {
         const banner = document.getElementById('maintenanceBanner');
         if (platformData.maintenanceMode) {
@@ -843,8 +1067,6 @@
             const msgInput = document.getElementById('chatMessageInput');
             if (msgInput) msgInput.disabled = false;
         }
-        if (currentUser?.isAdmin && document.getElementById('adminPage').classList.contains('active-page')) renderAdminPanel();
-        if (document.getElementById('profilePage').classList.contains('active-page')) renderProfile();
     }
 
     function toggleMaintenance() {
@@ -852,8 +1074,7 @@
         saveData();
         updateMaintenanceUI();
         showToast(platformData.maintenanceMode ? "🥚 Пасхальные техработы ВКЛЮЧЕНЫ 🐣" : "🐰 Пасхальные техработы ВЫКЛЮЧЕНЫ 🌸");
-        if (document.getElementById('adminPage').classList.contains('active-page')) renderAdminPanel();
-        if (document.getElementById('profilePage').classList.contains('active-page')) renderProfile();
+        renderAdminPanel();
     }
 
     function checkMaintenance(actionName) {
@@ -891,6 +1112,7 @@
         if (countSpan) countSpan.innerHTML = `🐣 ${onlineCount} онлайн`;
     }
 
+    // ========== РЕГИСТРАЦИЯ И ВХОД ==========
     function register() {
         const fullname = document.getElementById('regFullname').value.trim();
         const login = document.getElementById('regLogin').value.trim();
@@ -917,8 +1139,7 @@
             avatar: "🐰",
             isAdmin: false,
             isOnline: true,
-            lastSeen: new Date().toISOString(),
-            deviceId: deviceId
+            lastSeen: new Date().toISOString()
         };
         platformData.users.push(newUser);
         saveData();
@@ -940,12 +1161,6 @@
             return;
         }
         
-        if (user.deviceId && user.deviceId !== deviceId) {
-            errorSpan.innerText = 'Этот аккаунт уже используется на другом устройстве';
-            return;
-        }
-        
-        user.deviceId = deviceId;
         currentUser = user;
         currentUser.isOnline = true;
         currentUser.lastSeen = new Date().toISOString();
@@ -991,6 +1206,7 @@
         switchPage('feed');
     }
 
+    // ========== ЛЕНТА ==========
     function renderFeed() {
         const container = document.getElementById('feedContainer');
         const filteredPosts = platformData.posts.filter(p => !platformData.bannedUsers.includes(p.userId));
@@ -1005,19 +1221,43 @@
             const author = platformData.users.find(u => u.id === post.userId);
             const authorName = author ? author.fullname : "Пользователь";
             const authorAvatar = author ? author.avatar : "🥚";
+            const likeKey = `${post.id}_${currentUser.id}`;
+            const isLiked = platformData.userLikes[likeKey];
+            const comments = platformData.postComments[post.id] || [];
+            
             return `
                 <div class="feed-card">
                     <div class="card-header">
-                        <div class="user-avatar" style="width:44px; height:44px; font-size:18px; display:flex; align-items:center; justify-content:center;">${authorAvatar}</div>
+                        <div class="user-avatar" style="width:44px; height:44px; font-size:18px;">${authorAvatar}</div>
                         <div><strong>${escapeHtml(authorName)}</strong><br><span style="font-size:11px; color:#aaa;">${new Date(post.time).toLocaleString()}</span></div>
                     </div>
                     <div class="card-content">${escapeHtml(post.text)}</div>
-                    <div style="padding: 12px; border-top:1px solid #ffd6a5;">❤️ ${post.likes}</div>
+                    <div class="card-actions">
+                        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${post.id}')">
+                            ${isLiked ? '❤️' : '🤍'} ${post.likes || 0}
+                        </button>
+                        <button class="comment-btn" onclick="toggleComments('${post.id}')">
+                            💬 ${comments.length}
+                        </button>
+                    </div>
+                    <div id="comments-${post.id}" class="comments-section" style="display:none;">
+                        ${comments.map(c => `
+                            <div class="comment">
+                                <strong>${escapeHtml(c.userName)}</strong>: ${escapeHtml(c.text)}
+                                <div style="font-size:10px; color:#aaa;">${new Date(c.time).toLocaleString()}</div>
+                            </div>
+                        `).join('')}
+                        <div class="add-comment">
+                            <input type="text" id="comment-input-${post.id}" placeholder="Написать комментарий...">
+                            <button onclick="addComment('${post.id}', document.getElementById('comment-input-${post.id}').value); document.getElementById('comment-input-${post.id}').value = '';">🐣</button>
+                        </div>
+                    </div>
                 </div>
             `;
         }).join('');
     }
 
+    // ========== ИСТОРИИ ==========
     function renderStories() {
         const container = document.getElementById('storiesRow');
         const validStories = platformData.stories.filter(s => s && s.data);
@@ -1027,7 +1267,7 @@
             const authorName = author ? author.fullname.slice(0,2) : "🐣";
             return `
                 <div class="story-circle" onclick="viewStory(${idx})">
-                    <div class="story-avatar" style="background-image: url('${story.mediaType === 'image' ? story.data : ''}'); background-size: cover; display:flex; align-items:center; justify-content:center;">
+                    <div class="story-avatar" style="background-image: url('${story.mediaType === 'image' ? story.data : ''}'); background-size: cover;">
                         ${story.mediaType === 'image' ? '' : (story.mediaType === 'video' ? '🎥' : '📝')}
                     </div>
                     <span class="story-name">${authorName}</span>
@@ -1037,7 +1277,7 @@
         
         container.innerHTML = `
             <div class="story-circle" id="addStoryCircle">
-                <div class="story-avatar add" style="display:flex; align-items:center; justify-content:center;">+</div>
+                <div class="story-avatar add">+</div>
                 <span class="story-name">Моя история</span>
             </div>
             ${storiesHtml}
@@ -1100,6 +1340,7 @@
         showToast("🥚 Пасхальная история добавлена! 🐣");
     }
 
+    // ========== ЧАТЫ ==========
     function renderUsersList() {
         const container = document.getElementById('usersListContainer');
         const otherUsers = platformData.users.filter(u => u.id !== currentUser.id && !platformData.bannedUsers.includes(u.id));
@@ -1111,7 +1352,7 @@
         
         container.innerHTML = otherUsers.map(user => `
             <div class="user-item" data-user-id="${user.id}">
-                <div class="user-avatar" style="display:flex; align-items:center; justify-content:center;">${user.avatar || "🥚"}</div>
+                <div class="user-avatar">${user.avatar || "🥚"}</div>
                 <div class="user-info">
                     <div class="user-name">${escapeHtml(user.fullname)}</div>
                     <div class="user-status">${user.isOnline ? '🟢 онлайн 🐣' : '⚫ был(а) ' + formatTimeAgo(user.lastSeen)}</div>
@@ -1134,7 +1375,6 @@
         window.currentChatPartner = user;
         renderChatMessages(userId);
         updateMaintenanceUI();
-        markMessagesAsRead(userId);
     }
     
     function renderChatMessages(otherId) {
@@ -1158,23 +1398,6 @@
             </div>
         `).join('');
         container.scrollTop = container.scrollHeight;
-    }
-    
-    function markMessagesAsRead(otherId) {
-        const key = getChatKey(currentUser.id, otherId);
-        if (platformData.privateMessages[key]) {
-            let updated = false;
-            platformData.privateMessages[key].forEach(msg => {
-                if (msg.senderId !== currentUser.id && !msg.read) {
-                    msg.read = true;
-                    updated = true;
-                }
-            });
-            if (updated) {
-                saveData();
-                renderChatMessages(otherId);
-            }
-        }
     }
     
     function sendMessage(otherId, text) {
@@ -1201,11 +1424,12 @@
         document.getElementById('chatMessageInput').value = '';
     }
 
+    // ========== ПРОФИЛЬ ==========
     function renderProfile() {
         const lastSeenText = currentUser.lastSeen ? formatTimeAgo(currentUser.lastSeen) : "только что";
         document.getElementById('profileContent').innerHTML = `
             <div class="profile-header">
-                <div class="profile-avatar" style="display:flex; align-items:center; justify-content:center;">${currentUser.avatar || "🐣"}</div>
+                <div class="profile-avatar">${currentUser.avatar || "🐣"}</div>
                 <div style="font-size:24px; font-weight:700;">${escapeHtml(currentUser.fullname)}</div>
                 <div>${escapeHtml(currentUser.bio)}</div>
                 <div style="margin-top:8px; font-size:13px;">
@@ -1213,32 +1437,31 @@
                 </div>
                 ${currentUser.isAdmin ? '<div style="margin-top:8px;"><span class="admin-badge" style="background:white;">👑 Администратор 🐰</span></div>' : ''}
             </div>
-            <div style="background:rgba(255,248,235,0.95); margin:16px; border-radius:24px; padding:16px; border:1px solid #ffd6a5;">
+            <div style="background:white; margin:16px; border-radius:24px; padding:16px;">
                 <div><strong>📊 Пасхальная статистика</strong></div>
                 <div>🐣 Всего пользователей: ${platformData.users.length}</div>
                 <div>🥚 Постов: ${platformData.posts.length}</div>
                 <div>🐰 Историй: ${platformData.stories.length}</div>
                 <div>🔧 Режим техработ: ${platformData.maintenanceMode ? "ВКЛЮЧЁН 🥚" : "ВЫКЛЮЧЁН 🐣"}</div>
-                <div>🌸 С Пасхой! 🌸</div>
+                <div>🌸 ХРИСТОС ВОСКРЕСЕ! 🌸</div>
             </div>
         `;
     }
 
+    // ========== АДМИН-ПАНЕЛЬ ==========
     const adminFunctions = [
-        { emoji: "🔧🥚", name: "ПАСХАЛЬНЫЕ ТЕХРАБОТЫ", desc: platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ", action: toggleMaintenance },
-        { emoji: "🐣", name: "Все пользователи", desc: "Список всех", action: () => showToast(`Пользователей: ${platformData.users.length}\n${platformData.users.map(u=>u.fullname).join(', ')}`) },
-        { emoji: "🚫🥚", name: "Заблокировать", desc: "Блокировка юзера", action: () => { let name = prompt("Имя пользователя"); let u = platformData.users.find(u=>u.fullname.toLowerCase().includes(name.toLowerCase())); if(u && !u.isAdmin){ platformData.bannedUsers.push(u.id); saveData(); showToast(`Заблокирован ${u.fullname}`); renderUsersList(); } else showToast("Пользователь не найден"); } },
-        { emoji: "🔓🐣", name: "Разблокировать", desc: "Снять блок", action: () => { if(platformData.bannedUsers.length){ platformData.bannedUsers.pop(); saveData(); showToast("Разблокирован"); renderUsersList();} else showToast("Нет заблокированных"); } },
-        { emoji: "📝🐰", name: "Создать пост", desc: "Пасхальное поздравление", action: () => { 
-            if(!checkMaintenance("создание постов")) return;
+        { emoji: "🔧🥚", name: "ТЕХРАБОТЫ", desc: platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ", action: () => checkAdminAccess(toggleMaintenance) },
+        { emoji: "🐣", name: "Все пользователи", desc: "Список всех", action: () => checkAdminAccess(() => showToast(`Пользователей: ${platformData.users.length}\n${platformData.users.map(u=>u.fullname).join(', ')}`)) },
+        { emoji: "🚫🥚", name: "Заблокировать", desc: "Блокировка юзера", action: () => checkAdminAccess(() => { let name = prompt("Имя пользователя"); let u = platformData.users.find(u=>u.fullname.toLowerCase().includes(name.toLowerCase())); if(u && !u.isAdmin){ platformData.bannedUsers.push(u.id); saveData(); showToast(`Заблокирован ${u.fullname}`); renderUsersList(); } else showToast("Пользователь не найден"); }) },
+        { emoji: "🔓🐣", name: "Разблокировать", desc: "Снять блок", action: () => checkAdminAccess(() => { if(platformData.bannedUsers.length){ platformData.bannedUsers.pop(); saveData(); showToast("Разблокирован"); renderUsersList();} else showToast("Нет заблокированных"); }) },
+        { emoji: "📝🐰", name: "Создать пост", desc: "Пасхальное поздравление", action: () => checkAdminAccess(() => { 
             let text = prompt("Пасхальное поздравление 🥚"); 
             if(text){ platformData.posts.push({id:Date.now(), userId:currentUser.id, text: "🐣 " + text + " 🥚", time:new Date().toISOString(), likes:0}); saveData(); renderFeed(); showToast("Пост создан!"); } 
-        } },
-        { emoji: "🗑️", name: "Удалить пост", desc: "По ID", action: () => { let id = prompt("ID поста"); let idx = platformData.posts.findIndex(p=>p.id==id); if(idx>=0){ platformData.posts.splice(idx,1); saveData(); renderFeed(); showToast("Удалено"); } } },
-        { emoji: "📸", name: "Удалить историю", desc: "Последнюю", action: () => { if(platformData.stories.length){ platformData.stories.shift(); saveData(); renderStories(); showToast("История удалена"); } } },
-        { emoji: "✏️", name: "Изменить имя", desc: "Своё имя", action: () => { let n = prompt("Новое имя", currentUser.fullname); if(n){ currentUser.fullname=n + " 🐣"; currentUser.avatar="🐰"; saveData(); renderProfile(); renderFeed(); showToast("Имя изменено"); } } },
-        { emoji: "💬", name: "Глобальный чат", desc: "Всем пасхальное поздравление", action: () => { 
-            if(!checkMaintenance("отправка сообщений")) return;
+        }) },
+        { emoji: "🗑️", name: "Удалить пост", desc: "По ID", action: () => checkAdminAccess(() => { let id = prompt("ID поста"); let idx = platformData.posts.findIndex(p=>p.id==id); if(idx>=0){ platformData.posts.splice(idx,1); saveData(); renderFeed(); showToast("Удалено"); } }) },
+        { emoji: "📸", name: "Удалить историю", desc: "Последнюю", action: () => checkAdminAccess(() => { if(platformData.stories.length){ platformData.stories.shift(); saveData(); renderStories(); showToast("История удалена"); } }) },
+        { emoji: "✏️", name: "Изменить имя", desc: "Своё имя", action: () => checkAdminAccess(() => { let n = prompt("Новое имя", currentUser.fullname); if(n){ currentUser.fullname=n + " 🐣"; currentUser.avatar="🐰"; saveData(); renderProfile(); renderFeed(); showToast("Имя изменено"); } }) },
+        { emoji: "💬", name: "Глобальный чат", desc: "Всем пасхальное поздравление", action: () => checkAdminAccess(() => { 
             let msg = prompt("Пасхальное поздравление всем 🥚"); 
             if(msg){ 
                 platformData.users.forEach(u => { 
@@ -1249,28 +1472,36 @@
                     } 
                 }); 
                 saveData(); 
-                showToast("Отправлено всем! С Пасхой!"); 
+                showToast("Отправлено всем! Христос Воскресе!"); 
             } 
-        } },
-        { emoji: "🎁", name: "Бонус всем", desc: "+100 лайков", action: () => { platformData.posts.forEach(p=>p.likes+=100); saveData(); renderFeed(); showToast("Пасхальный бонус начислен!"); } },
-        { emoji: "📊", name: "Статистика", desc: "Полный отчёт", action: () => { showToast(`📊 Постов:${platformData.posts.length} Историй:${platformData.stories.length} Юзеров:${platformData.users.length} Техработы:${platformData.maintenanceMode?"ВКЛ":"ВЫКЛ"} 🐣`); } }
+        }) },
+        { emoji: "🎁", name: "Бонус всем", desc: "+100 лайков", action: () => checkAdminAccess(() => { 
+            platformData.posts.forEach(p => { p.likes = (p.likes || 0) + 100; }); 
+            saveData(); 
+            renderFeed(); 
+            showToast("Пасхальный бонус начислен!"); 
+        }) },
+        { emoji: "📊", name: "Статистика", desc: "Полный отчёт", action: () => checkAdminAccess(() => { showToast(`📊 Постов:${platformData.posts.length} Историй:${platformData.stories.length} Юзеров:${platformData.users.length} Техработы:${platformData.maintenanceMode?"ВКЛ":"ВЫКЛ"} 🐣`); }) }
     ];
 
     function renderAdminPanel() {
         adminFunctions[0].desc = platformData.maintenanceMode ? "🔴 ВЫКЛЮЧИТЬ" : "🟢 ВКЛЮЧИТЬ";
         const container = document.getElementById('adminGrid');
         container.innerHTML = adminFunctions.map(f => `
-            <div class="admin-card">
+            <div class="admin-card" data-action="${f.name}">
                 <div class="emoji">${f.emoji}</div>
                 <div class="title">${f.name}</div>
                 <div class="desc">${f.desc}</div>
             </div>
         `).join('');
+        
+        // Привязываем обработчики к каждой карточке
         document.querySelectorAll('.admin-card').forEach((card, idx) => {
             card.onclick = () => adminFunctions[idx].action();
         });
     }
 
+    // ========== НАВИГАЦИЯ ==========
     function switchPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(`${pageId}Page`).classList.add('active-page');
@@ -1286,7 +1517,7 @@
         updateMaintenanceUI();
     }
 
-    // Обработчики
+    // ========== ОБРАБОТЧИКИ ==========
     document.getElementById('closeChatBtn')?.addEventListener('click', () => document.getElementById('chatWindow').style.display = 'none');
     document.getElementById('sendChatBtn')?.addEventListener('click', () => {
         const input = document.getElementById('chatMessageInput');
@@ -1357,7 +1588,12 @@
         }
     });
 
-    // Запуск
+    // Делаем функции глобальными
+    window.toggleLike = toggleLike;
+    window.addComment = addComment;
+    window.toggleComments = toggleComments;
+
+    // ========== ЗАПУСК ==========
     deviceId = getDeviceId();
     loadData();
     
